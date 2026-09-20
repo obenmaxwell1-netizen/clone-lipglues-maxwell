@@ -1,0 +1,643 @@
+/* =========================================================================
+   global.css — Base reset, typography, shared utilities
+   Depends on tokens.css (must load first)
+   ========================================================================= */
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font);
+  background: var(--white);
+  color: var(--ink);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ----- Type scale from brand spec --------------------------------------- */
+.h1, h1 {
+  font-weight: 800;
+  font-size: 72px;
+  letter-spacing: -0.04em;
+  line-height: 0.86;
+  margin: 0;
+  color: var(--ink);
+}
+.h2, h2 {
+  font-weight: 800;
+  font-size: 56px;
+  letter-spacing: -0.03em;
+  line-height: 0.95;
+  margin: 0;
+  color: var(--ink);
+}
+.h3, h3 {
+  font-weight: 700;
+  font-size: 28px;
+  letter-spacing: -0.02em;
+  line-height: 34px;
+  margin: 0;
+  color: var(--ink);
+}
+.h4, h4 {
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 1.3;
+  margin: 0;
+  color: var(--ink);
+}
+.h5, h5 {
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 1.4;
+  margin: 0;
+  color: var(--ink);
+}
+.caption {
+  font-weight: 600;
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  color: var(--ink);
+  text-transform: uppercase;
+}
+
+/* Mobile type scale */
+@media (max-width: 768px) {
+  .h1, h1 { font-size: 44px; }
+  .h2, h2 { font-size: 36px; }
+  .h3, h3 { font-size: 24px; line-height: 1.2; }
+}
+
+a { color: inherit; }
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+  outline: 2px solid var(--hot-pink);
+  outline-offset: 2px;
+}
+.skip-link {
+  position: fixed;
+  top: 8px;
+  left: 8px;
+  z-index: 2147483646;
+  padding: 12px 16px;
+  border-radius: var(--radius-btn);
+  background: var(--ink);
+  color: var(--white);
+  font-weight: 700;
+  text-decoration: none;
+  transform: translateY(-150%);
+}
+.skip-link:focus { transform: translateY(0); }
+
+/* ----- Shared button styles --------------------------------------------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-8);
+  padding: 14px 24px;
+  border-radius: var(--radius-pill);
+  font: inherit;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 0;
+  cursor: pointer;
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+.btn--primary { background: var(--hot-pink); color: var(--ink); }
+.btn--primary:hover { background: var(--hot-pink-hover); }
+.btn--secondary { background: var(--ink); color: var(--white); }
+.btn--outline { background: var(--white); color: var(--ink); border: 1px solid var(--line); padding: 13px 23px; }
+.btn[disabled] { background: var(--paper-grey); color: var(--text-soft); cursor: not-allowed; }
+
+/* ----- Shared inputs ---------------------------------------------------- */
+.input {
+  display: block;
+  width: 100%;
+  padding: 14px 16px;
+  background: var(--paper-grey);
+  border: 0;
+  border-radius: var(--radius-btn);
+  font: inherit;
+  font-size: 14px;
+  color: var(--ink);
+  outline: none;
+}
+.input::placeholder { color: var(--text-soft); }
+.input:focus { background: var(--white); box-shadow: inset 0 0 0 1px var(--ink); }
+
+/* ----- Shared layout ---------------------------------------------------- */
+.page {
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: 0 var(--content-pad);
+}
+@media (max-width: 768px) {
+  .page { padding: 0 var(--content-pad-mobile); }
+}
+
+/* ----- Visually hidden (for a11y labels) -------------------------------- */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* =========================================================================
+   SITE CHROME PRIMITIVES — .op-* (ONE PAGE design system)
+   -------------------------------------------------------------------------
+   These styles pair with the markup rendered by nav.js + footer.js, and
+   with shared .op-btn / .op-eyebrow / .op-dot primitives used across every
+   page. They live here (not in home.css) because every page injects the
+   shared nav + footer markup via the `<header data-nav>` / `<footer
+   data-footer>` pattern locked 2026-04-21. Pages that don't load home.css
+   (about, terms, privacy, 404, products, find-us) still get styled chrome
+   from this file.
+   ========================================================================= */
+
+/* --- Eyebrow + dot --- */
+.op-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-pill);
+  background: var(--hot-pink);
+  flex-shrink: 0;
+}
+.op-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.op-eyebrow__text {
+  font-family: var(--font);
+  font-weight: 700;
+  font-size: 11px;
+  line-height: 14px;
+  letter-spacing: 3.52px;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+/* --- Buttons (pill, three variants) — Figma 275:15/17, 293:20/22, 280:14 --- */
+.op-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  cursor: pointer;
+  border: 0;
+  font-family: var(--font);
+  font-weight: 700;
+  font-size: 13px;
+  line-height: 1.4;
+  letter-spacing: 0.12em;
+  white-space: normal;
+  text-align: center;
+  min-height: 44px;
+  padding: 16px 24px;
+  border-radius: var(--radius-pill);
+  transition: opacity var(--transition-fast);
+}
+.op-btn--primary { background: var(--hot-pink); color: var(--ink); }
+.op-btn--secondary { background: var(--white); color: var(--ink); border: 1px solid var(--line); padding: 15px 22px; }
+.op-btn--outline { background: var(--white); color: var(--ink); border: 1px solid var(--line); }
+.op-btn--sm { padding: 12px 22px; border-radius: var(--radius-btn); }
+.op-btn--sm.op-btn--outline { padding: 11px 21px; }
+.op-btn[disabled],
+.op-btn[aria-disabled="true"] { cursor: not-allowed; opacity: 0.55; }
+.op-btn {
+  transition: opacity var(--transition-fast),
+              background var(--transition-fast),
+              color var(--transition-fast),
+              border-color var(--transition-fast);
+}
+@media (hover: hover) {
+  /* Primary remains the single pink action; hover darkens the same hue. */
+  .op-btn--primary:hover { background: var(--hot-pink-hover); color: var(--ink); opacity: 1; }
+  /* Secondary / outline keep readable ink text and gain a pink border. */
+  .op-btn--secondary:hover,
+  .op-btn--outline:hover { color: var(--ink); border-color: var(--hot-pink); opacity: 1; }
+  /* Fallback for any other variant — keep the original opacity nudge */
+  .op-btn:not(.op-btn--primary):not(.op-btn--secondary):not(.op-btn--outline):hover { opacity: 0.85; }
+  .op-btn[disabled]:hover,
+  .op-btn[aria-disabled="true"]:hover { opacity: 0.55; }
+}
+
+/* --- Sticky nav (rendered by nav.js into `<header data-nav>`) — Figma 274:5 --- */
+.op-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  height: 68px;
+  padding: 22px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  box-sizing: border-box;
+}
+.op-nav__logo {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  text-decoration: none;
+  color: var(--ink);
+  transition: color var(--transition-fast);
+}
+@media (hover: hover) {
+  .op-nav__logo:hover { color: var(--ink); opacity: 0.68; }
+}
+/* Inline SVG wordmark (Figma 387:5 "Logo (MWAH black)") + ™. Both
+   use fill="currentColor" so the logo link can inherit hover treatment. The natural
+   viewBoxes are 467×94 and 40×19; sized via height to match the 22px
+   nav row from Figma. */
+.op-nav__wordmark-svg {
+  height: 22px;
+  width: auto;
+  display: block;
+}
+.op-nav__tm-svg {
+  height: 6px;
+  width: auto;
+  display: block;
+  margin-left: 3px;
+  align-self: flex-start;
+  margin-top: 1px;
+}
+.op-nav__center {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+.op-nav__link {
+  font-family: var(--font);
+  font-weight: 700;
+  font-size: 13px;
+  line-height: 14px;
+  letter-spacing: 2.42px;
+  color: var(--ink);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+@media (hover: hover) {
+  .op-nav__link:hover { color: var(--ink); text-decoration: underline; text-decoration-color: var(--hot-pink); text-decoration-thickness: 2px; text-underline-offset: 5px; }
+}
+.op-nav__social {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+}
+.op-nav__ig {
+  width: 22px;
+  height: 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink);
+  text-decoration: none;
+}
+@media (hover: hover) {
+  .op-nav__ig:hover { color: var(--ink); opacity: 0.68; }
+}
+/* Hamburger button + drawer panel. Hidden on desktop (where the
+   inline center-links + social cluster carry navigation); flipped on
+   at 768 and below (Kyle 2026-04-28 — replaces the prior temporary mobile
+   nav with the canonical hamburger-left / logo-center pattern). */
+.op-nav__hamburger {
+  display: none;
+  width: 44px;
+  height: 44px;
+  margin-left: -10px;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-pill);
+  transition: color var(--transition-fast);
+}
+@media (hover: hover) {
+  .op-nav__hamburger:hover { color: var(--ink); background: var(--pink-wash); }
+}
+.op-nav__drawer {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 101;
+  background: var(--white);
+  padding: 24px 20px 32px;
+  overflow-y: auto;
+}
+.op-nav__drawer[hidden] { display: none; }
+.op-nav__drawer-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 44px;
+  margin-bottom: 36px;
+}
+.op-nav__drawer-brand {
+  font-weight: 800;
+  font-size: 24px;
+  letter-spacing: -0.04em;
+}
+.op-nav__drawer-close {
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: var(--paper-grey);
+  color: var(--ink);
+  display: inline-grid;
+  place-items: center;
+  cursor: pointer;
+}
+.op-nav__drawer-links {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-bottom: 28px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 24px;
+}
+.op-nav__drawer-links .op-nav__link {
+  display: flex;
+  align-items: center;
+  min-height: 56px;
+  font-size: 18px;
+  letter-spacing: 2.8px;
+}
+.op-nav__drawer-social {
+  display: flex;
+  gap: 18px;
+}
+@media (max-width: 768px) {
+  .op-nav {
+    height: 56px;
+    padding: 14px 20px;
+    /* Hamburger left, logo dead-center, single social icon right.
+       Three-track grid (rather than space-between) so the logo sits
+       in the visual center regardless of left/right asymmetry. */
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+  }
+  /* 32px box round a 22px glyph gives a 5px inset, and the -5px pull puts
+     the glyph itself on the 20px gutter. The social cluster opposite uses
+     the same box and the same pull, so both ends of the bar are optically
+     flush by construction rather than by a number that happens to match at
+     one width. The previous -10px sat against 44px boxes on the right, so
+     the hamburger read 10px nearer the edge than TikTok did. Height stays
+     44px: it is the vertical dimension a thumb misses. */
+  .op-nav__hamburger {
+    display: inline-flex;
+    justify-self: start;
+    width: 32px;
+    margin-left: -5px;
+  }
+  .op-nav__logo { justify-self: center; }
+  .op-nav__center { display: none; }
+  /* Socials are shown in the header on mobile too (Kyle 2026-09-19).
+     They were drawer-only, which put every channel two taps and a
+     deliberate menu-open away on the surface most visitors use. The
+     drawer keeps its copy; this is the always-visible one.
+
+     Sizing, measured rather than assumed. At 375px the content box is
+     335px and the wordmark track is ~126px, leaving ~105px per 1fr side
+     track. Three 32px boxes need 96px, which fits — so the wordmark now
+     sits dead centre. It previously did not: three 44px boxes demanded
+     136px, the right track clamped to min-content and pushed the lockup
+     ~31px off centre. Narrowing the box to 32px buys the centred wordmark
+     and the tighter cluster in one move.
+
+     44px was never required across both axes. WCAG 2.5.5 asks 44 and is
+     AAA; the AA rule is 2.5.8 at 24px. 32 x 44 clears AA with room and
+     keeps the full 44px vertically, which is the axis a thumb actually
+     misses on a horizontal row of icons.
+
+     Glyph spacing: 5px inset either side of a 22px glyph in a 32px box,
+     so adjacent glyphs sit 10px apart rather than the 24px that 44px
+     boxes at gap:2px produced. They read as one cluster now instead of
+     three scattered marks. */
+  .op-nav__social {
+    justify-self: end;
+    gap: 0;
+    /* Mirrors the hamburger's pull so both ends are flush to the gutter. */
+    margin-right: -5px;
+  }
+  /* Scoped to the header cluster on purpose. nav.js injects the same
+     markup into .op-nav__drawer-social, so an unscoped rule would also
+     resize the drawer icons — there they sit on an 18px gap, and 44px
+     boxes would stretch that row to ~168px with dead space between 22px
+     glyphs. */
+  .op-nav__social .op-nav__ig {
+    width: 32px;
+    min-height: 44px;
+  }
+  .op-nav__drawer { display: block; }
+  .op-nav__drawer[hidden] { display: none; }
+}
+
+/* Below ~336px only, and now just the gutter. With 34px boxes the demand
+   at 320px is 27 + 126 + 91 = 244px inside a 280px content box, so the
+   overflow this query was written for no longer happens — the old rule
+   widened the icons back to 40px, which after the resize above would have
+   made the narrowest screens the roomiest ones. Trimming the gutter still
+   buys a little air at 320px, so that part stays. */
+@media (max-width: 335px) {
+  .op-nav {
+    padding-left: var(--sp-12);
+    padding-right: var(--sp-12);
+  }
+}
+
+/* Served-HTML navigation remains usable if enhancement JavaScript fails. */
+.op-nav--static .op-nav__logo-text {
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+@media (max-width: 768px) {
+  .op-nav--static {
+    display: flex;
+    justify-content: space-between;
+  }
+  .op-nav--static .op-nav__center {
+    display: flex;
+    gap: 14px;
+  }
+  .op-nav--static .op-nav__link {
+    font-size: 13px;
+    letter-spacing: 1.6px;
+  }
+}
+/* At >=1440 viewports the nav and footer (which are full-page-width, not
+   capped by .onepage) restore the .onepage 48px gutter so the wordmark,
+   social icons, and footer columns line up with the page content — same
+   trick home.css applies to .op-progress / .op-signup. The footer rule
+   lives HERE (not home.css) because footer.js renders on every page;
+   keeping it in home.css left the footer flush-left on /about, /products,
+   and the legal pages at wide viewports (NC QA 2026-06-10).
+   Doubled-class for specificity over the base shorthand paddings. */
+@media (min-width: 1440px) {
+  .op-nav.op-nav,
+  .op-footer.op-footer {
+    padding-left: calc(50vw - 720px + 48px);
+    padding-right: calc(50vw - 720px + 48px);
+  }
+}
+
+/* --- Footer (rendered by footer.js into `<footer data-footer>`) — Figma 281:5 --- */
+.op-footer {
+  background: var(--white);
+  border-top: 1px solid var(--line);
+  padding: 48px 48px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+.op-footer__top {
+  display: flex;
+  align-items: flex-start;
+  gap: 48px;
+}
+/* Brand stays at its current width (~300px so SITE doesn't shift), but
+   SITE / LEGAL / FOLLOW are no longer flex-1 — they pack tight at the
+   48px gap and leave the right side empty rather than stretching
+   evenly across the row (Kyle 2026-04-28). */
+.op-footer__brand { flex: 0 0 300px; min-width: 0; }
+.op-footer__col { flex: 0 0 auto; min-width: 120px; display: flex; flex-direction: column; gap: 8px; }
+.op-footer__wordmark {
+  display: flex;
+  align-items: flex-start;
+  color: var(--ink);
+  margin: 0 0 12px;
+}
+.op-footer__wordmark-svg {
+  height: 22px;
+  width: auto;
+  display: block;
+}
+.op-footer__tm-svg {
+  height: 6px;
+  width: auto;
+  display: block;
+  margin-left: 3px;
+  margin-top: 1px;
+}
+.op-footer__tagline {
+  font-family: var(--font);
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 16px;
+  color: var(--text-mid);
+  margin: 0;
+  width: 300px;
+}
+.op-footer__col-title {
+  font-family: var(--font);
+  font-weight: 700;
+  font-size: 10px;
+  line-height: 12px;
+  letter-spacing: 3px;
+  color: var(--text-soft);
+  margin: 0;
+}
+.op-footer__link {
+  font-family: var(--font);
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 2.16px;
+  color: var(--ink);
+  text-decoration: none;
+}
+.op-footer__lcb {
+  border-top: 1px solid var(--border);
+  padding-top: 20px;
+  font-family: var(--font);
+  font-weight: 400;
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--text-soft);
+}
+.op-footer__lcb p { margin: 0; max-width: 920px; }
+/* Final-row copyright + patent line — sits below the LCB warning,
+   smaller and centered (Kyle 2026-04-28). */
+.op-footer__legal {
+  font-family: var(--font);
+  font-weight: 400;
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--text-soft);
+  text-align: center;
+  padding-top: 12px;
+}
+.op-footer__legal p { margin: 0; }
+
+/* Footer mobile — stack columns. Pre-Phase B (PR #14) this was the
+   #1 reported footer issue on narrow screens. */
+@media (max-width: 768px) {
+  .op-footer {
+    padding: 32px 20px 24px;
+    gap: 20px;
+  }
+  /* Brand stacks on top, then SITE / LEGAL / FOLLOW lay out side-by-side
+     in a single row underneath (Figma 370:209 mobile/LCB Footer). */
+  .op-footer__top {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 24px 16px;
+  }
+  .op-footer__brand {
+    flex: 0 0 100%;
+  }
+  .op-footer__col {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+  .op-footer__tagline {
+    width: auto;
+    max-width: 300px;
+  }
+  .op-footer__lcb {
+    padding-top: 16px;
+    font-size: 11px;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 900px) {
+  .op-footer { padding-left: 32px; padding-right: 32px; }
+  .op-footer__top { gap: 28px; }
+  .op-footer__brand { flex-basis: 240px; }
+  .op-footer__tagline { width: 240px; }
+  .op-footer__col { min-width: 92px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}

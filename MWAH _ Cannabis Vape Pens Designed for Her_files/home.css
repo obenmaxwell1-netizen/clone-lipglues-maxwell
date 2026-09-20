@@ -1,0 +1,455 @@
+/* =========================================================================
+   home.css — MWAH home page (index.html).
+
+   Desktop layout targets Figma artboard "ONE PAGE · Desktop" (251:7) at
+   1440. At >=1440 viewports .onepage caps at 1440 and centers. At 768-
+   1439 the layout flows naturally (flex + responsive photo widths) —
+   no more transform:scale hack. At 768 and below a mobile media query per section
+   stacks columns, reduces type, and removes absolute-positioned
+   decorations. Mobile values follow the Figma "ONE PAGE · Mobile"
+   artboard (370:29) as best approximated without the live file — KC
+   tweaks specific values in follow-up commits.
+
+   Split for line-cap compliance (agent_docs/conventions.md: 800 hard):
+   - home.css          — body wrapper, hero, signup, responsive root
+   - home-products.css — products header, progress, coverflow cards
+   - home-find.css     — find-us header, search pill, map, listings
+
+   Site chrome (.op-btn / .op-eyebrow / .op-dot / .op-nav / .op-footer)
+   lives in global.css — rendered by nav.js / footer.js on every page.
+   ========================================================================= */
+
+.onepage-body {
+  background: var(--white);
+  min-width: 320px;
+}
+.onepage {
+  max-width: 1440px;
+  margin: 0 auto;
+  position: relative;
+  background: var(--white);
+}
+
+/* Full-bleed bars: visual rules (section borders, the paper-grey
+   progress band, the signup band, the find-us section borders, footer
+   border) extend to the viewport edges while text content stays inside
+   the 1440 column. Applied at all viewports (the previous >=1440 media
+   query produced barely-visible -5..-30px margins at 1450-1500, which
+   read as "still inset" — 100vw + centering offset always reaches the
+   edge cleanly). Inner padding is restored on a per-section basis below
+   so content stays aligned to the 48px gutter. */
+.op-progress,
+.op-find-header,
+.op-find-body .loc-main,
+.op-signup,
+.op-footer {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  box-sizing: border-box;
+}
+/* At >=1440 viewports, push inner content back to .onepage's 48px
+   gutter so the layout still reads as 1440-cap content with full-bleed
+   bands behind it. Below 1440 the section already fills viewport so
+   the per-element padding (48px / 20px on mobile) carries through.
+   Selectors are double-classed (.X.X) to bump specificity above the
+   base shorthand padding declarations in the per-section CSS files,
+   which load AFTER home.css and would otherwise win on source order. */
+@media (min-width: 1440px) {
+  /* .op-footer's gutter restoration moved to global.css (2026-06-10) —
+     the footer renders on every page, not just home. */
+  .op-progress.op-progress,
+  .op-find-header.op-find-header,
+  .op-signup.op-signup {
+    padding-left: calc(50vw - 720px + 48px);
+    padding-right: calc(50vw - 720px + 48px);
+  }
+  .op-find-body .loc-main.loc-main {
+    padding-left: calc(50vw - 720px + 48px);
+    padding-right: calc(50vw - 720px + 48px);
+  }
+}
+/* Push the search pill and email/subscribe form 32px in from the
+   .onepage right gutter at every viewport so their right edges line
+   up with the store list's "SORTED BY DISTANCE" caption (which sits
+   32 inside the list column due to .loc-list__header's own padding).
+   Locked Kyle 2026-04-28. Using margin-right on the children instead
+   of asymmetric padding on the parents avoids shrinking the flex
+   row's available width, which was causing the form to wrap onto its
+   own line at narrower wide-screen widths. */
+/* Force right offset via translateX (can't be overridden by any
+   margin-* rule loaded later, and doesn't affect flex parent's
+   layout-width math so the form never wraps onto a new line). */
+.op-find-header.op-find-header > .op-search-pill,
+.op-signup.op-signup > .op-signup__form {
+  transform: none; /* was translateX(-32px) right-edge align (Kyle 2026-04-28); left-anchored 2026-06-28 so the search + email pills share the content-left edge */
+}
+@media (max-width: 768px) {
+  .op-find-header.op-find-header > .op-search-pill,
+  .op-signup.op-signup > .op-signup__form {
+    transform: none;
+  }
+}
+
+/* ============================================================
+   HERO (Figma 275:5) — desktop: photo full-bleed background, copy
+   flows inside the 1440 cap. Mobile: stacked.
+============================================================ */
+.op-hero {
+  position: relative;
+  background: var(--white);
+}
+.op-hero__photo {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1440 / 760;
+  max-height: 760px;
+  overflow: hidden;
+}
+/* Hero copy is dark (--ink title + --text-mid sub) over a full-bleed photo.
+   This soft left-anchored white scrim lifts the text backdrop to WCAG-AA
+   wherever the photo runs mid-tone, then fades to transparent before the
+   center faces so the image still reads clean. (a11y — design-audit hero) */
+.op-hero__photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    100deg,
+    rgba(255, 255, 255, 0.62) 0%,
+    rgba(255, 255, 255, 0.30) 30%,
+    rgba(255, 255, 255, 0) 54%
+  );
+}
+.op-hero__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  display: block;
+  pointer-events: none;
+}
+.op-hero__copy {
+  position: absolute;
+  left: 48px;
+  top: 260px;
+  width: min(760px, calc(100% - 96px));
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+}
+.op-hero__title {
+  font-family: var(--font);
+  font-weight: 800;
+  font-size: clamp(44px, 5.6vw, 72px);
+  line-height: 0.86;
+  letter-spacing: -0.04em;
+  color: var(--ink);
+  margin: 0;
+  max-width: 560px;
+}
+.op-hero__sub {
+  font-family: var(--font);
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--text-mid);
+  margin: 0;
+}
+.op-hero__mobile-break { display: none; }
+.op-hero__cta-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.op-hero__scroll {
+  position: absolute;
+  left: 50%;
+  bottom: 32px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.op-hero__scroll-text {
+  font-family: var(--font);
+  font-weight: 700;
+  font-size: 13px;
+  line-height: 12px;
+  letter-spacing: 3.4px;
+  color: var(--ink);
+}
+.op-hero__scroll-line {
+  display: block;
+  width: 36px;
+  height: 1px;
+  background: var(--ink);
+}
+.op-hero__scroll-chevron {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-right: 1.5px solid var(--line);
+  border-bottom: 1.5px solid var(--line);
+  transform: rotate(45deg);
+}
+
+/* Full-bleed hero photo at >=1440 so it spans viewport edges, not the
+   centered artboard. Copy still anchors inside the artboard. */
+@media (min-width: 1440px) {
+  .op-hero__photo {
+    width: 100vw;
+    max-width: none;
+    margin-left: calc(50% - 50vw);
+  }
+}
+
+/* ============================================================
+   EMAIL SIGNUP (Figma 280:5) — desktop: copy + form side-by-side.
+   Mobile: stacked, form full-width.
+============================================================ */
+.op-signup {
+  background: var(--paper-grey);
+  border-top: 1px solid var(--border);
+  padding: 32px 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 18px;
+}
+.op-signup__copy {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+.op-signup__title {
+  font-family: var(--font);
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 22px;
+  letter-spacing: -0.18px;
+  color: var(--ink);
+  margin: 0;
+}
+.op-signup__form {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  row-gap: 8px;
+  column-gap: 8px;
+  width: 420px;
+  max-width: 100%;
+}
+.op-signup__input {
+  flex: 1;
+  min-height: 44px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  padding: 0 16px;
+  font-family: var(--font);
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 1.4;
+  color: var(--ink);
+  min-width: 0;
+  outline: none;
+}
+.op-signup__input::placeholder { color: var(--text-soft); }
+.op-signup__form .op-btn--sm {
+  min-height: 44px;
+  padding: 0 20px;
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  border-radius: var(--radius-pill);
+  background: var(--hot-pink);
+  color: var(--ink);
+}
+@media (hover: hover) {
+  .op-signup__form .op-btn--sm:hover { background: var(--hot-pink-hover); }
+}
+/* Status line — populated by email-signup.js for inline validation
+   errors and submit feedback. Shares row with consent text. */
+.op-signup__status {
+  flex-basis: 100%;
+  font-family: var(--font);
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 1.4;
+  margin: 0;
+  color: var(--text-mid);
+}
+/* Consent microcopy under the email + button row. `agreed: true`
+   serialization is backed by this visible language (PR #22). */
+.op-signup__consent {
+  flex-basis: 100%;
+  font-family: var(--font);
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--text-soft);
+  margin: 0;
+}
+.op-signup__consent a {
+  color: var(--text-mid);
+  text-decoration: underline;
+}
+@media (hover: hover) {
+  .op-signup__consent a:hover { color: var(--ink); }
+}
+
+/* Confirmation card — replaces the .op-signup section interior after a
+   successful subscribe. Same paper-grey background flows from the
+   parent, so the card visually inherits the band's chrome. The single
+   slide-in animation is enough delight without being noisy. */
+.op-signup--confirmed {
+  justify-content: center;
+}
+.op-signup__confirm {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  opacity: 0;
+  transform: translateY(8px);
+  animation: signup-confirm-in 380ms cubic-bezier(.2,.8,.2,1) forwards;
+}
+@media (prefers-reduced-motion: reduce) {
+  .op-signup__confirm {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+.op-signup__confirm-icon {
+  width: 44px;
+  height: 44px;
+  display: inline-grid;
+  place-items: center;
+  border-radius: var(--radius-pill);
+  background: var(--hot-pink);
+  color: var(--ink);
+  flex: 0 0 auto;
+}
+.op-signup__confirm-icon svg { display: block; }
+.op-signup__confirm-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.op-signup__confirm-title {
+  font-family: var(--font);
+  font-weight: 800;
+  font-size: 22px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin: 0;
+}
+.op-signup__confirm-msg {
+  font-family: var(--font);
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--ink);
+  margin: 0;
+}
+.op-signup__confirm--inline {
+  /* For footer / product-form contexts that don't wrap in .op-signup —
+     keep the same animation but tighter spacing. */
+  padding: 8px 0;
+}
+@keyframes signup-confirm-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* .op-footer styles live in global.css — rendered by footer.js on every
+   page so every surface gets the same chrome. */
+
+/* ============================================================
+   MOBILE (≤768) — ONE PAGE Mobile (Figma 370:29 approximations).
+   KC can tweak specific values in follow-up commits; these are
+   conservative defaults that keep WCAG AA readable type + single-
+   column stacks. Chrome (.op-nav mobile + .op-footer mobile) lives
+   in global.css.
+============================================================ */
+@media (max-width: 768px) {
+  .op-hero__photo {
+    /* Mobile uses a dedicated, pre-composed three-girl asset
+       (hero-trio-mobile.jpg, ~4701×3468). Match its aspect-ratio so
+       it displays without object-fit cropping. */
+    aspect-ratio: 4 / 3;
+    max-height: none;
+  }
+  .op-hero__copy {
+    position: static;
+    width: 100%;
+    padding: 32px 24px 0;
+    gap: 16px;
+  }
+  .op-hero__title {
+    font-size: 44px;
+    letter-spacing: -1.76px;
+    line-height: 1;
+    max-width: none;
+  }
+  .op-hero__sub {
+    font-size: 14px;
+  }
+  .op-hero__mobile-break { display: block; }
+  .op-hero__cta-row {
+    width: 100%;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .op-hero__cta-row .op-btn {
+    width: 100%;
+    min-width: 0;
+    justify-content: center;
+  }
+  .op-hero__scroll { display: none; }
+
+  .op-signup {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 24px 20px;
+  }
+  .op-signup__copy {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .op-signup__title {
+    font-size: 20px;
+    line-height: 1.2;
+  }
+  .op-signup__form {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+  /* Mobile: input above, SUBSCRIBE button below — both full-width and
+     identical height (Kyle 2026-04-28). Matches Figma "Stay in the know"
+     mobile spec. Heights pinned with min-height + max-height so neither
+     a long-form button label nor browser default input chrome can drift
+     them apart. */
+  .op-signup__input,
+  .op-signup__form .op-btn--sm {
+    width: 100%;
+    box-sizing: border-box;
+    height: 56px;
+    min-height: 56px;
+    max-height: 56px;
+  }
+  .op-signup__form .op-btn--sm {
+    padding: 0;
+  }
+}

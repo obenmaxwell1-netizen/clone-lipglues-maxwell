@@ -1,0 +1,417 @@
+/* =========================================================================
+   home-products.css — PRODUCTS section of home (Figma 276:5, 277:5).
+   Split from home.css for line-cap compliance (conventions.md).
+   Consumed alongside home.css + home-find.css.
+   ========================================================================= */
+
+/* ============================================================
+   PRODUCTS · HEADER + PROGRESS (Figma 276:5)
+============================================================ */
+.op-products-header {
+  position: relative;
+  background: var(--white);
+  display: flex;
+  flex-direction: column;
+}
+.op-products-header__row {
+  padding: 56px 48px 32px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+.op-products-header__left {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 18px;
+}
+.op-products-header__title {
+  font-family: var(--font);
+  font-weight: 800;
+  font-size: 56px;
+  line-height: 0.95;
+  letter-spacing: -1.68px;
+  color: var(--ink);
+  margin: 0;
+}
+.op-products-header__sub {
+  font-family: var(--font);
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--text-mid);
+  margin: 0;
+}
+.op-products-header__catalog-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 var(--sp-16);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-decoration: none;
+}
+@media (hover: hover) {
+  .op-products-header__catalog-link:hover { border-color: var(--hot-pink); }
+}
+.op-products-header__right {
+  padding-bottom: 12px;
+}
+.op-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: var(--radius-pill);
+}
+.op-pill--black {
+  background: var(--ink);
+  color: var(--white);
+  font-family: var(--font);
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 12px;
+  letter-spacing: 1.98px;
+}
+
+.op-progress {
+  background: var(--paper-grey);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  height: 50px;
+  padding: 14px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  box-sizing: border-box;
+}
+.op-progress__left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.op-progress__label {
+  font-family: var(--font);
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 12px;
+  letter-spacing: 3px;
+  color: var(--ink);
+}
+.op-progress__count {
+  font-family: var(--font);
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 12px;
+  letter-spacing: 2.2px;
+  color: var(--text-soft);
+}
+.op-progress__bar {
+  flex: 1;
+  height: 2px;
+  background: var(--border);
+  position: relative;
+  overflow: hidden;
+}
+.op-progress__fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 12.5%;
+  height: 2px;
+  background: var(--hot-pink);
+}
+.op-progress__hint {
+  font-family: var(--font);
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 12px;
+  letter-spacing: 3px;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.op-progress__hint-mobile { display: none; }
+
+/* ============================================================
+   PRODUCTS · CARD ROW (Figma 277:5) — h:760
+============================================================ */
+.op-cards {
+  position: relative;
+  background: var(--white);
+  padding: 32px 0 56px;
+  overflow: hidden;
+}
+.op-cards__row {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  overflow-anchor: none;
+  /* vertical padding gives room for the focal card's drop shadow */
+  padding: 40px 0 64px;
+}
+.op-cards__row::-webkit-scrollbar { display: none; }
+.op-cards__row.is-loop-resetting {
+  scroll-snap-type: none;
+  scroll-behavior: auto;
+}
+.op-cards__row.is-loop-resetting .op-card__shell { transition: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .op-cards__row { scroll-behavior: auto; }
+  .op-cards .op-card__shell { transition: none; }
+}
+
+/* spacers so the first + last card can center during coverflow scroll */
+.op-cards__spacer {
+  flex-shrink: 0;
+  width: calc(50vw - 208px); /* (viewport center) - (card half = 416/2) */
+  min-width: 120px;
+}
+
+/* soft edge fades on both sides */
+.op-cards::before,
+.op-cards::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 160px;
+  pointer-events: none;
+  z-index: 3;
+}
+.op-cards::before { left: 0; background: linear-gradient(to right, var(--white), rgba(255, 255, 255, 0)); }
+.op-cards::after  { right: 0; background: linear-gradient(to left,  var(--white), rgba(255, 255, 255, 0)); }
+
+/* Cards (Figma 277:7..132) */
+.op-card {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 24px;
+  width: 416px;
+  flex-shrink: 0;
+  scroll-snap-align: center;
+  cursor: default;
+  transition: none;
+  transform-origin: center center;
+
+}
+.op-card:not(.is-focal) .op-card__shell {
+  transform: scale(0.78);
+  opacity: 0.5;
+}
+.op-card.is-focal .op-card__shell {
+  transform: scale(1);
+  opacity: 1;
+}
+.op-card.is-focal .op-card__shell {
+  box-shadow: 0 28px 72px rgba(0, 0, 0, 0.14);
+}
+.op-card__shell {
+  position: relative;
+  transition: transform var(--transition-mid), opacity var(--transition-mid);
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  width: 416px;
+  height: 400px;
+  overflow: hidden;
+}
+.op-card__chip {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  background: var(--white);
+  padding: 5px 10px;
+  border-radius: var(--radius-pill);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  font-family: var(--font);
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 12px;
+  letter-spacing: 1.98px;
+  color: var(--ink);
+  z-index: 2;
+}
+.op-card__video {
+  position: absolute;
+  top: 50px;
+  left: 87px;
+  width: 240px;
+  height: 300px;
+  object-fit: contain;
+  /* White (not paper-grey) so the contain-letterbox bars match the
+     surrounding card surface — otherwise mobile shows grey strips
+     above/below the spinning bottle. */
+  background: var(--white);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.op-card__info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 10px;
+  width: 100%;
+}
+.op-card__eyebrow {
+  font-family: var(--font);
+  font-weight: 700;
+  font-size: 12px;
+  line-height: normal;
+  letter-spacing: 1.8px;
+  color: var(--text-soft);
+  margin: 0;
+}
+.op-card__title {
+  font-family: var(--font);
+  font-weight: 700;
+  font-size: 28px;
+  line-height: 34px;
+  letter-spacing: -0.56px;
+  color: var(--ink);
+  margin: 0;
+}
+.op-card__vibe {
+  font-family: var(--font);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 20px;
+  color: var(--text-mid);
+  margin: 0;
+}
+.op-card__moods {
+  font-family: var(--font);
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 16px;
+  letter-spacing: 0.52px;
+  color: var(--text-soft);
+  margin: 0;
+  white-space: pre;
+}
+.op-card__detail {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  margin-top: 2px;
+  padding: 8px 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-decoration: none;
+}
+@media (hover: hover) {
+  .op-card__detail:hover { border-color: var(--hot-pink); }
+}
+
+/* ============================================================
+   MOBILE (≤768) — products stack: header + progress + coverflow.
+   Coverflow stays horizontal-scroll-snap (native touch pattern);
+   cards just shrink. Full column-stack would lose the editorial
+   "swipe between products" feel that makes the page feel premium.
+============================================================ */
+@media (max-width: 768px) {
+  .op-products-header__left {
+    width: 100%;
+  }
+  .op-products-header__catalog-link {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+    line-height: 1.4;
+    padding: 15px 22px;
+  }
+  .op-products-header__row {
+    padding: 40px 20px 24px;
+  }
+  .op-products-header__title {
+    font-size: 36px;
+    letter-spacing: -1.08px;
+    /* Wrap to two lines on mobile ("Meet the / collection.") to match
+       Figma ONE PAGE Mobile (Kyle 2026-04-28). */
+    max-width: 8ch;
+  }
+  .op-products-header__sub {
+    font-size: 16px;
+  }
+  .op-progress {
+    /* Mobile: drop the paper-grey band per Figma — reads as cleaner
+       inline metadata rather than a sectioning bar (Kyle 2026-04-28). */
+    background: var(--white);
+    border-top: 0;
+    border-bottom: 0;
+    padding: 12px 20px;
+    height: auto;
+    min-height: 44px;
+  }
+  .op-progress__hint {
+    display: inline-flex;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+  }
+  .op-progress__hint-desktop { display: none; }
+  .op-progress__hint-mobile { display: inline; }
+
+  .op-cards {
+    padding: 24px 0 40px;
+  }
+  .op-cards__row {
+    padding: 24px 0 40px;
+    gap: 12px;
+  }
+  .op-cards__spacer {
+    width: calc(50vw - 140px); /* half of mobile card (280/2) */
+    min-width: 24px;
+  }
+  .op-card {
+    width: 280px;
+    gap: 16px;
+  }
+  .op-card__shell {
+    width: 280px;
+    height: 320px;
+  }
+  .op-card__video {
+    top: 40px;
+    left: 58px;
+    width: 164px;
+    height: 220px;
+  }
+  .op-card__title {
+    font-size: 22px;
+    line-height: 26px;
+    letter-spacing: -0.44px;
+  }
+  /* Keep current copy on one line at normal text size without preventing
+     reflow when a visitor enlarges text. */
+  .op-card__vibe {
+    font-size: 14px;
+    line-height: 20px;
+  }
+  .op-card__moods {
+    font-size: 12px;
+    line-height: 1.5;
+    letter-spacing: 0;
+    white-space: normal;
+    text-align: center;
+  }
+}

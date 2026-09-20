@@ -1,0 +1,71 @@
+/* Optional one-tap discovery question shown only after a successful signup. */
+.op-signup__confirm {
+  flex-wrap: wrap;
+}
+
+.op-signup__discovery {
+  width: 100%;
+  min-width: 0;
+  margin: 10px 0 0;
+  padding: 0;
+  border: 0;
+}
+
+.op-signup__discovery-question {
+  font-family: var(--font);
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--ink);
+  margin: 0 0 10px;
+}
+
+.op-signup__discovery-question span {
+  font-weight: 500;
+  color: var(--text-mid);
+}
+
+.op-signup__discovery-options {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.op-signup__discovery-option {
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  background: var(--white);
+  color: var(--ink);
+  font-family: var(--font);
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 1.25;
+  cursor: pointer;
+}
+
+.op-signup__discovery-option:focus-visible {
+  outline: 3px solid var(--hot-pink);
+  outline-offset: 2px;
+}
+
+@media (hover: hover) {
+  .op-signup__discovery-option:hover { border-color: var(--hot-pink); }
+}
+
+.op-signup__discovery-thanks {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  margin: 0;
+  font-family: var(--font);
+  font-weight: 700;
+  color: var(--ink);
+}
+
+@media (max-width: 768px) {
+  .op-signup__discovery-options {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

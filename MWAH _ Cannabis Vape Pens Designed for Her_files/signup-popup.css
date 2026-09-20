@@ -1,0 +1,538 @@
+/* =========================================================================
+   signup-popup.css - Delayed homepage newsletter invitation.
+   Pairs with public/assets/js/signup-popup.js. Tokens only.
+   ========================================================================= */
+
+.signup-popup[hidden] {
+  display: none !important;
+}
+
+.signup-popup {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  display: grid;
+  place-items: center;
+  padding: var(--sp-24);
+  font-family: var(--font);
+}
+
+.signup-popup__backdrop {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  padding: 0;
+  background: rgba(0, 0, 0, 0.62);
+  backdrop-filter: blur(8px);
+  cursor: default;
+  opacity: 0;
+  transition: opacity var(--transition-mid);
+}
+
+.signup-popup__dialog {
+  position: relative;
+  z-index: 1;
+  width: min(760px, 100%);
+  max-height: min(680px, calc(100vh - var(--sp-48)));
+  display: grid;
+  grid-template-columns: minmax(220px, 0.78fr) minmax(360px, 1.12fr);
+  overflow: auto;
+  border-radius: var(--radius-map);
+  background: var(--white);
+  box-shadow: var(--shadow-card);
+  opacity: 0;
+  transform: translateY(18px) scale(0.98);
+  transition:
+    opacity var(--transition-mid),
+    transform var(--transition-mid);
+}
+
+.signup-popup.is-open .signup-popup__backdrop,
+.signup-popup.is-open .signup-popup__dialog {
+  opacity: 1;
+}
+
+.signup-popup.is-open .signup-popup__dialog {
+  transform: translateY(0) scale(1);
+}
+
+/* One portrait asset serves both layouts, cropped differently per
+   breakpoint rather than exported twice.
+
+   Painted as a background, not an <img>: in flow, the image sizes the
+   dialog from its own 900x1350 ratio (a 312px column forced 513px of
+   height regardless of content); out of flow via position:absolute, it
+   measures correctly but Chrome paints nothing. A background contributes
+   no height and always paints. The plain url() is the fallback for
+   engines without image-set().
+
+   min-height is a floor, not a target: the ask state exceeds it on its
+   own content, so it only binds on the shorter confirmation state. */
+.signup-popup__visual {
+  position: relative;
+  min-height: 380px;
+  overflow: hidden;
+  background-color: var(--pink-wash);
+  /* The x descriptors are the point: before this, image-set only chose a
+     FORMAT and the resolution came from a media query, so the browser
+     could not account for device pixel ratio at all.
+
+     Sizing is off the PAINTED width, not the box width. background-size:
+     cover on a 2:3 portrait in a tall narrow column paints
+     max(width, height * 2/3), and this column is tall: the dialog caps at
+     680px, so the painted width reaches ~453 CSS px even though the
+     column is ~306. 450 at 1x and 900 at 2x are therefore right-sized at
+     about 99% — correct, but with no headroom, so re-check this if the
+     dialog ever gets taller.
+
+     1x desktop now gets the 450 where it used to get the 900. That is a
+     deliberate 40KB -> 19KB trade on a size that is right for the box;
+     the old behaviour was over-serving, and supersampling a 900 is only
+     marginally cleaner. 1x desktop displays are also the rarest case
+     this file serves. */
+  background-image: url("../assets/img/signup/pr-box-900.jpg");
+  background-image: image-set(
+    url("../assets/img/signup/pr-box-450.webp") type("image/webp") 1x,
+    url("../assets/img/signup/pr-box-900.webp") type("image/webp") 2x,
+    url("../assets/img/signup/pr-box-450.jpg") type("image/jpeg") 1x,
+    url("../assets/img/signup/pr-box-900.jpg") type("image/jpeg") 2x
+  );
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: 46% 42%;
+}
+
+/* The ask state is hidden rather than replaced when the follow offer
+   shows, so the form keeps the listeners email-signup.js bound to it at
+   load. Stated explicitly because .signup-popup__content is a flex
+   container and a flex item ignores the UA [hidden] rule. */
+.signup-popup__ask[hidden] {
+  display: none;
+}
+
+.signup-popup__content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+  padding: var(--sp-64) var(--sp-48) var(--sp-48);
+}
+
+.signup-popup__close {
+  position: absolute;
+  z-index: 3;
+  top: 16px;
+  right: 16px;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: var(--paper-grey);
+  color: var(--ink);
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+@media (hover: hover) {
+  .signup-popup__close:hover {
+    background: var(--border);
+  }
+}
+
+.signup-popup__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-8);
+  margin: 0 0 var(--sp-16);
+  color: var(--ink);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+}
+
+.signup-popup__eyebrow::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  flex: 0 0 auto;
+  border-radius: var(--radius-pill);
+  background: var(--hot-pink);
+}
+
+.signup-popup__title {
+  margin: 0;
+  color: var(--ink);
+  font-size: clamp(34px, 4vw, 46px);
+  font-weight: 800;
+  letter-spacing: -0.045em;
+  line-height: 0.98;
+}
+
+.signup-popup__description {
+  margin: var(--sp-16) 0 0;
+  color: var(--text-mid);
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+.signup-popup__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-12);
+  margin-top: var(--sp-24);
+}
+
+.signup-popup__label {
+  color: var(--ink);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+}
+
+.signup-popup__input {
+  width: 100%;
+  height: 54px;
+  box-sizing: border-box;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-btn);
+  background: var(--white);
+  padding: 0 var(--sp-16);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: 16px;
+}
+
+.signup-popup__input::placeholder {
+  color: var(--text-soft);
+}
+
+.signup-popup__submit {
+  min-height: 54px;
+  border: 0;
+  border-radius: var(--radius-btn);
+  background: var(--hot-pink);
+  color: var(--ink);
+  cursor: pointer;
+  font-family: var(--font);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.17em;
+  transition: background var(--transition-fast);
+}
+
+.signup-popup__submit:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+@media (hover: hover) {
+  .signup-popup__submit:not(:disabled):hover {
+    background: var(--hot-pink-hover);
+  }
+}
+
+.signup-popup__consent,
+.signup-popup__status {
+  margin: 0;
+  color: var(--text-soft);
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.signup-popup__consent a {
+  color: var(--text-mid);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.signup-popup__status {
+  color: var(--text-mid);
+}
+
+/* Confirmation state — the card is denser than the homepage signup
+   section it shares styles with, so the dialog stays close to the
+   proportions of the design rather than growing a third taller.
+   Survey option sizing is deliberately untouched: those stay 44px for
+   the tap-target minimum. */
+.signup-popup__content--confirmed {
+  justify-content: flex-start;
+  padding: var(--sp-32);
+}
+
+.signup-popup .op-signup__confirm--inline {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+.signup-popup .op-signup__confirm-title {
+  font-size: 28px;
+}
+
+.signup-popup .op-signup__follow {
+  margin-top: var(--sp-16);
+  padding-top: var(--sp-16);
+}
+
+/* In the dismiss offer the follow row is the only child of the card, so
+   the divider that separates it from "You're on the list." above it in
+   the confirmation card would hang at the very top with nothing to
+   divide. */
+.signup-popup__content--confirmed .op-signup__confirm--inline > .op-signup__follow:first-child {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: 0;
+}
+
+/* Centred on mobile too (Kyle 2026-09-18) — the dialog sits in the middle
+   of the viewport at every width rather than flipping to a bottom sheet. */
+@media (max-width: 768px) {
+  .signup-popup {
+    padding: var(--sp-12);
+  }
+
+  .signup-popup__dialog {
+    width: 100%;
+    max-height: calc(100vh - var(--sp-24));
+    grid-template-columns: 1fr;
+    border-radius: var(--radius-map);
+  }
+
+  /* Below 768 the visual is a full-bleed band, so its CSS width tracks the
+     viewport. Band = viewport - 24 (.signup-popup padding, var(--sp-12) a
+     side), minus a classic scrollbar where one is laid out: ~351px at a
+     375px phone, ~456px at 480, ~744px at a 768px tablet. That is a 2x
+     spread, so one ladder cannot serve both without overpaying the phone.
+
+     This block used to pin the 450 file across all of it — the smallest
+     asset on the widest boxes at the highest densities. At 375/3x that was
+     450 real pixels resolved into ~1053; at 768 the 450 was stretched past
+     1:1 before density entered into it. That is the blur.
+
+     Structured as wide-default + narrow-override rather than two disjoint
+     queries. A `max-width: 480px` / `min-width: 481px` pair does not
+     partition the range — a fractional width in (480, 481), which browser
+     zoom and fractional-DPR Android both produce, matches neither and
+     silently falls through to the desktop ladder above. Overriding cannot
+     leave a gap. */
+  .signup-popup__visual {
+    min-height: 0;
+    height: 124px;
+    background-position: 50% 58%;
+    /* Tablets and landscape phones: band 456-744, so 1x already wants the
+       900. Stops at 2x — nothing this wide is 3x.
+
+       The fallback is the 900, not the 450. Every image-set entry here
+       carries type(), which is the newest part of the syntax (Safari 17+,
+       Chrome/Firefox 113+); an engine that cannot parse type() discards
+       the whole declaration and lands on this url(). Pointing that at the
+       450 would hand the exact blur being fixed to older iPhones, which
+       are all 2x or 3x. */
+    background-image: url("../assets/img/signup/pr-box-900.jpg");
+    background-image: image-set(
+      url("../assets/img/signup/pr-box-900.webp") type("image/webp") 1x,
+      url("../assets/img/signup/pr-box-1800.webp") type("image/webp") 2x,
+      url("../assets/img/signup/pr-box-900.jpg") type("image/jpeg") 1x,
+      url("../assets/img/signup/pr-box-1800.jpg") type("image/jpeg") 2x
+    );
+  }
+
+  /* Phones: band 351-456 CSS px. Fallback stays the 900 for the same
+     type() reason — a 2x/3x phone on an older engine is precisely the
+     device this change exists for. */
+  @media (max-width: 480px) {
+    .signup-popup__visual {
+      background-image: url("../assets/img/signup/pr-box-900.jpg");
+      background-image: image-set(
+        url("../assets/img/signup/pr-box-450.webp") type("image/webp") 1x,
+        url("../assets/img/signup/pr-box-900.webp") type("image/webp") 2x,
+        url("../assets/img/signup/pr-box-1350.webp") type("image/webp") 3x,
+        url("../assets/img/signup/pr-box-450.jpg") type("image/jpeg") 1x,
+        url("../assets/img/signup/pr-box-900.jpg") type("image/jpeg") 2x,
+        url("../assets/img/signup/pr-box-1350.jpg") type("image/jpeg") 3x
+      );
+    }
+  }
+
+  .signup-popup__content {
+    padding: var(--sp-32) var(--sp-24) var(--sp-24);
+  }
+
+  /* Stated rather than inherited: the rule above has equal specificity
+     and comes later, so it would otherwise silently undo the confirmed
+     padding set outside this query. */
+  .signup-popup__content--confirmed {
+    padding: var(--sp-24);
+  }
+
+  .signup-popup__title {
+    max-width: 300px;
+    font-size: 36px;
+  }
+
+  .signup-popup__description {
+    margin-top: var(--sp-12);
+    font-size: 14px;
+  }
+
+  .signup-popup__form {
+    margin-top: var(--sp-24);
+  }
+}
+
+@media (max-height: 660px) and (max-width: 768px) {
+  .signup-popup__visual {
+    height: 96px;
+  }
+
+  .signup-popup__content {
+    padding-top: var(--sp-24);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .signup-popup__backdrop,
+  .signup-popup__dialog {
+    transition: none;
+  }
+}
+
+/* =========================================================================
+   Follow row — rendered inside the post-subscribe confirmation card by
+   email-signup.js. Popup-only surface, so the rules live here rather than
+   in home.css alongside the shared confirm card.
+   ========================================================================= */
+
+/* The confirmation card is a wrapping flexbox, so a block with no basis
+   shrinks to its content instead of spanning the row. Matches the width
+   handling .op-signup__discovery already uses. */
+.op-signup__follow {
+  width: 100%;
+  min-width: 0;
+  margin-top: var(--sp-24);
+  padding-top: var(--sp-16);
+  border-top: 1px solid var(--line);
+}
+
+/* Mirrors the popup's own eyebrow + headline pair, so the follow ask reads
+   as the same component one step on rather than a different voice. */
+.op-signup__follow-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-8);
+  margin: 0 0 var(--sp-8);
+  color: var(--ink);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+}
+
+.op-signup__follow-eyebrow::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  flex: 0 0 auto;
+  border-radius: var(--radius-pill);
+  background: var(--hot-pink);
+}
+
+.op-signup__follow-title {
+  margin: 0 0 var(--sp-16);
+  color: var(--ink);
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.028em;
+  line-height: 1.12;
+}
+
+.op-signup__follow-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--sp-12);
+}
+
+.op-signup__follow-link {
+  position: relative;
+  min-height: 66px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-4);
+  border: 1px solid var(--ink);
+  /* --radius-card, not --radius-btn. These are tiles, not inline buttons:
+     roughly 149 x 66 once the row fills the card, and at that size a 12px
+     corner reads clipped against the long edge rather than rounded. The
+     12px looked right while the row was squeezed to 80px-wide tiles, which
+     is the bug above this one. */
+  border-radius: var(--radius-card);
+  background: var(--ink);
+  color: var(--white);
+  text-decoration: none;
+  transition:
+    background var(--transition-fast),
+    color var(--transition-fast),
+    border-color var(--transition-fast);
+}
+
+.op-signup__follow-link span {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+@media (hover: hover) {
+  .op-signup__follow-link:hover {
+    background: var(--ink-hover);
+  }
+}
+
+/* Opened state — set on click, confirmed when the tab regains focus. */
+.op-signup__follow-link.is-opened {
+  border-color: var(--hot-pink);
+  background: var(--white);
+  color: var(--ink);
+}
+
+@media (hover: hover) {
+  .op-signup__follow-link.is-opened:hover {
+    background: var(--pink-wash);
+  }
+}
+
+.op-signup__follow-check {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 18px;
+  height: 18px;
+  display: none;
+  place-items: center;
+  border-radius: var(--radius-pill);
+  background: var(--hot-pink);
+  color: var(--white);
+}
+
+.op-signup__follow-link.is-opened .op-signup__follow-check {
+  display: grid;
+}
+
+.op-signup__follow-note {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-8);
+  margin: 0 0 var(--sp-12);
+  padding: var(--sp-8) var(--sp-12);
+  border-radius: var(--radius-btn);
+  background: var(--pink-wash);
+  color: var(--ink);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.op-signup__follow-note svg {
+  flex: 0 0 auto;
+  color: var(--hot-pink);
+}

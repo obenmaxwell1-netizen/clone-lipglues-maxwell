@@ -1,0 +1,57 @@
+/* =========================================================================
+   tokens.css — MWAH consumer website design tokens
+   Source of truth: Figma BRAND SPEC · WEBSITE (locked with Kyle 2026-04-20)
+   Mirrors agent_docs/design.md
+   ========================================================================= */
+
+:root {
+  /* Color palette */
+  --hot-pink: #FF6EC1;
+  --hot-pink-hover: #F259B3;
+  --soft-pink: #FFA4DC;
+  --pink-wash: #FFF0F8;
+  --ink: #000000;
+  --ink-hover: #222222;
+  /* Hairline color for borders/dividers. Soft grey (Kyle 2026-04-28) —
+     matches the paper-grey divider treatment seen between the find-us
+     hint band and the signup section. */
+  --line: #E0E0E0;
+  --paper-grey: #F4F4F4;
+  --map-grey: #ECECEE;
+  --white: #FFFFFF;
+  --border: #E6E6E6;
+  --text-mid: #555555;
+  /* Small supporting text must still meet WCAG AA on white/paper surfaces. */
+  --text-soft: #666666;
+
+  /* Spacing scale (power-of-two, 4px base) */
+  --sp-4: 4px;
+  --sp-8: 8px;
+  --sp-12: 12px;
+  --sp-16: 16px;
+  --sp-24: 24px;
+  --sp-32: 32px;
+  --sp-48: 48px;
+  --sp-64: 64px;
+
+  /* Apple-style border radii */
+  --radius-btn: 12px;
+  --radius-card: 16px;
+  --radius-map: 20px;
+  --radius-pill: 999px;
+
+  /* Shadow (one elevation, keep it flat) */
+  --shadow-card: 0 2px 12px rgba(0, 0, 0, 0.08);
+
+  /* Typography */
+  --font: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+
+  /* Layout */
+  --content-max: 1200px;
+  --content-pad: var(--sp-48);
+  --content-pad-mobile: var(--sp-16);
+
+  /* Motion */
+  --transition-fast: 0.15s;
+  --transition-mid: 0.25s;
+}

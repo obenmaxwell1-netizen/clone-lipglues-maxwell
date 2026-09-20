@@ -1,0 +1,195 @@
+/* =========================================================================
+   home-find.css — FIND US section of home (Figma 278:5, 279:5).
+   Split from home.css for line-cap compliance (conventions.md).
+   ========================================================================= */
+
+/* ============================================================
+   FIND US · HEADER (Figma 278:5)
+============================================================ */
+.op-find-header {
+  background: var(--white);
+  border-top: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 56px 48px 8px;
+  gap: 18px;
+}
+.op-find-header__copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+}
+.op-find-header__title {
+  font-family: var(--font);
+  font-weight: 800;
+  font-size: 56px;
+  line-height: 0.95;
+  letter-spacing: -1.68px;
+  color: var(--ink);
+  margin: 0;
+}
+.op-find-header__sub {
+  font-family: var(--font);
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--text-mid);
+  margin: 0;
+  width: 560px;
+}
+
+.op-find-faq {
+  padding: var(--sp-48);
+  border-top: 1px solid var(--line);
+}
+.op-find-faq h3 {
+  margin: 0 0 var(--sp-24);
+  font-size: 28px;
+  line-height: 1.2;
+}
+.op-find-faq__list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--sp-24);
+  margin: 0;
+}
+.op-find-faq__item {
+  padding-top: var(--sp-16);
+  border-top: 1px solid var(--line);
+}
+.op-find-faq__item dt {
+  margin: 0 0 var(--sp-8);
+  font-weight: 700;
+}
+.op-find-faq__item dd {
+  margin: 0;
+  color: var(--text-mid);
+  line-height: 1.6;
+}
+
+/* Unified search pill (Figma 278:12 / 350:7) */
+.op-search-pill {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--paper-grey);
+  border-radius: var(--radius-pill);
+  padding: 8px 8px 8px 12px;
+  width: 440px;
+  box-sizing: border-box;
+}
+/* Magnifier is a real submit button so clicking it runs the search. */
+.op-search-pill__submit {
+  width: 44px;
+  height: 44px;
+  border: 0;
+  background: transparent;
+  color: var(--text-mid);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: var(--radius-pill);
+  transition: color var(--transition-fast), background var(--transition-fast);
+}
+.op-search-pill__submit:hover { color: var(--ink); background: rgba(0,0,0,0.04); }
+.op-search-pill__submit:focus-visible { outline: 2px solid var(--hot-pink); outline-offset: 2px; }
+/* Pink GPS button on the right. */
+.op-search-pill__gps {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-pill);
+  background: var(--hot-pink);
+  color: var(--ink);
+  border: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background var(--transition-fast);
+}
+/* Hover tooltip — surfaces "USE MY LOCATION" so the icon's purpose is
+   discoverable without a click. CSS-only via ::after; the aria-label
+   on the <button> already covers screen readers (Kyle 2026-04-28). */
+.op-search-pill__gps::after {
+  content: attr(aria-label);
+  text-transform: uppercase;
+  position: absolute;
+  bottom: calc(100% + 10px);
+  right: 0;
+  background: var(--ink);
+  color: var(--white);
+  font-family: var(--font);
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  padding: 6px 12px;
+  border-radius: var(--radius-pill);
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(4px);
+  transition: opacity 0.18s ease, transform 0.18s ease;
+  z-index: 10;
+}
+@media (hover: hover) {
+  .op-search-pill__gps:hover { background: var(--hot-pink-hover); }
+  .op-search-pill__gps:hover::after,
+  .op-search-pill__gps:focus-visible::after {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.op-search-pill__input {
+  flex: 1;
+  border: 0;
+  background: transparent;
+  font-family: var(--font);
+  font-weight: 400;
+  font-size: 16px;
+  color: var(--ink);
+  padding: 8px 0;
+  min-width: 0;
+  outline: none;
+}
+.op-search-pill__input::placeholder { color: var(--text-soft); }
+
+/* The Find Us body (map + list) lives inline directly below the header
+   and is styled by /assets/css/home-locator.css — that file is loaded
+   lazily by /assets/js/locator-loader.js when the user scrolls near
+   the section. Keeping its rules out of this file keeps the homepage's
+   first-paint CSS small. */
+
+/* ============================================================
+   MOBILE (≤768) — header copy stacks above the search pill.
+============================================================ */
+@media (max-width: 768px) {
+  .op-find-header {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 40px 20px 0;
+    gap: 20px;
+  }
+  .op-find-header__title {
+    font-size: 36px;
+    letter-spacing: -1.08px;
+  }
+  .op-find-header__sub {
+    font-size: 14px;
+    width: auto;
+  }
+  .op-search-pill {
+    width: 100%;
+  }
+  .op-find-faq {
+    padding: var(--sp-32) 20px;
+  }
+  .op-find-faq__list {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,181 @@
+/* =========================================================================
+   request.css — "Request MWAH at your shop" CTA row + modal (Find Us).
+   Pairs with public/assets/js/request-modal.js. Tokens only.
+   ========================================================================= */
+
+/* ===== CTA row (sits below the locator list in .op-find-body) ===== */
+/* Full-width row below the map+list, left-aligned to the same content edge
+   as the search + email pills. */
+.req-cta {
+  display: flex; align-items: center; justify-content: flex-start; gap: 24px;
+  padding: 28px 48px; border-top: 1px solid var(--line); flex-wrap: wrap;
+}
+.req-cta__copy { display: flex; flex-direction: column; gap: 2px; text-align: left; }
+/* Matches .op-signup__title ("New drops. New cities. No spam.") */
+.req-cta__title { font-family: var(--font); font-weight: 700; font-size: 18px; line-height: 22px; letter-spacing: -0.18px; color: var(--ink); }
+.req-cta__sub { font-family: var(--font); font-size: 13px; color: var(--text-mid); }
+/* Type and box match .op-btn in global.css. This button predates the shared
+   button system and had drifted to 10px / .22em / fixed 40px — smaller type
+   and nearly double the tracking of every other primary CTA on the page,
+   which is why it read as shrunken next to them, and 40px was under the
+   44px tap-target minimum. Vertical padding is 10px rather than .op-btn's
+   16px so the resting height lands exactly on 44px instead of 50px, keeping
+   the CTA row compact; it still grows if the label ever wraps. */
+.req-cta__btn {
+  display: inline-flex; align-items: center; justify-content: center; border: 0; cursor: pointer;
+  background: var(--hot-pink); color: var(--ink); font-family: var(--font);
+  font-weight: 700; font-size: 13px; line-height: 1.4; letter-spacing: 0.12em; text-transform: uppercase;
+  min-height: 44px; padding: 10px 24px; border-radius: var(--radius-pill); transition: background var(--transition-fast);
+}
+.req-cta__btn:hover { background: var(--hot-pink-hover); }
+.req-cta__btn:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+/* ===== Modal ===== */
+.req-scrim {
+  position: fixed; inset: 0; background: rgba(0,0,0,.55); backdrop-filter: blur(3px);
+  display: none; align-items: center; justify-content: center; padding: 20px; z-index: 1000;
+}
+.req-scrim.is-open { display: flex; }
+.req-modal {
+  background: var(--white); border-radius: var(--radius-map); box-shadow: 0 24px 70px rgba(0,0,0,.32);
+  width: 440px; max-width: 100%; max-height: 90vh; overflow: hidden; display: flex; flex-direction: column;
+}
+/* Scrolls as a whole when the head + body floor + foot can't fit the capped
+   modal height. The sticky head/foot below are written for exactly this
+   parent; without the scroll they were inert and the overflow was clipped. */
+.req-form { display: flex; flex-direction: column; min-height: 0; height: 100%; overflow-y: auto; }
+.req-head { padding: 24px 24px 16px; position: sticky; top: 0; z-index: 2; background: var(--white); flex-shrink: 0; }
+.req-eyebrow { font-family: var(--font); font-size: 11px; font-weight: 700; letter-spacing: .22em; color: var(--ink); }
+.req-title { font-family: var(--font); font-weight: 800; font-size: 24px; letter-spacing: -.02em; margin: 8px 0 4px; color: var(--ink); }
+.req-sub { font-family: var(--font); font-size: 14px; color: var(--text-mid); margin: 0; line-height: 1.45; }
+.req-close {
+  position: absolute; top: 12px; right: 12px; width: 44px; height: 44px; border-radius: var(--radius-pill);
+  border: 0; background: var(--paper-grey); color: var(--ink); font-size: 18px; cursor: pointer; line-height: 1;
+}
+.req-close:hover { background: var(--border); }
+.req-close:focus-visible { outline: 2px solid var(--hot-pink); outline-offset: 2px; }
+
+/* min-height is a floor, not a hint: .req-head and .req-foot are flex-shrink:0,
+   so without it a short viewport (landscape phone, or any phone once the soft
+   keyboard shrinks innerHeight) lets them eat the whole capped modal and this
+   collapses to a few pixels — taking the search pill and results with it.
+   132px keeps the search pill plus one result row on screen.
+   flex-basis must stay `auto` (not 0): .req-modal has no definite height, so a
+   0 basis makes the modal size itself to head + foot + floor and the body never
+   grows to its content on a tall viewport. */
+.req-body { padding: 0 24px 8px; overflow-y: auto; min-height: 132px; flex: 1 1 auto; }
+.req-search { display: flex; align-items: center; gap: 10px; background: var(--paper-grey); border-radius: var(--radius-pill); padding: 10px 16px; }
+.req-search svg { color: var(--text-mid); flex-shrink: 0; }
+.req-search input { flex: 1; border: 0; background: transparent; font-family: var(--font); font-size: 15px; outline: none; min-width: 0; color: var(--ink); }
+
+.req-list { margin: 8px 0 4px; max-height: 240px; overflow-y: auto; scrollbar-width: thin; }
+.req-opt {
+  display: flex; align-items: flex-start; gap: 12px; width: 100%; text-align: left;
+  padding: 12px; border: 0; background: transparent; cursor: pointer; border-radius: var(--radius-btn); font-family: var(--font);
+}
+.req-opt:hover { background: var(--paper-grey); }
+.req-opt:focus-visible { outline: 2px solid var(--hot-pink); outline-offset: -2px; }
+.req-opt__pin { width: 12px; height: 12px; border-radius: 50%; background: var(--white); border: 2px solid var(--hot-pink); flex-shrink: 0; margin-top: 4px; }
+.req-opt__pin.is-stocked { background: var(--hot-pink); }
+.req-opt__text { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.req-opt__name { font-weight: 700; font-size: 15px; line-height: 1.2; color: var(--ink); }
+.req-opt__meta { font-size: 12.5px; color: var(--text-soft); line-height: 1.35; }
+.req-opt__badge { display: inline-flex; align-items: center; margin-top: 3px; font-size: 9px; font-weight: 800; letter-spacing: .12em; color: var(--ink); text-decoration: underline; text-decoration-color: var(--hot-pink); text-decoration-thickness: 2px; text-underline-offset: 3px; }
+.req-empty { padding: 18px 12px; color: var(--text-soft); font-size: 13px; text-align: center; }
+/* Truncation notice under the capped result list. */
+.req-more { margin: 6px 0 2px; padding: 0 12px; color: var(--text-soft); font-size: 12px; text-align: center; line-height: 1.4; }
+
+.req-manual-open {
+  width: 100%; min-height: 44px; border: 0; background: transparent; color: var(--ink);
+  font-family: var(--font); font-size: 12px; font-weight: 700; cursor: pointer;
+  text-decoration: underline; text-decoration-color: var(--hot-pink); text-decoration-thickness: 2px; text-underline-offset: 4px;
+}
+.req-manual-open:hover { background: var(--paper-grey); border-radius: var(--radius-btn); }
+.req-manual-open:focus-visible { outline: 2px solid var(--hot-pink); outline-offset: 2px; }
+.req-manual { display: flex; flex-direction: column; gap: 12px; padding: 4px 0 12px; }
+.req-manual[hidden] { display: none; }
+.req-manual__back {
+  align-self: flex-start; min-height: 44px; border: 0; background: transparent; color: var(--ink);
+  font-family: var(--font); font-size: 11px; font-weight: 700; cursor: pointer; padding: 0;
+}
+.req-manual__back:focus-visible { outline: 2px solid var(--hot-pink); outline-offset: 2px; }
+.req-manual__intro { margin: -4px 0 0; color: var(--text-mid); font-size: 13px; }
+.req-manual__row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.req-field { display: flex; flex-direction: column; gap: 6px; }
+.req-field__label { color: var(--ink); font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.req-field__optional { color: var(--text-soft); font-weight: 500; letter-spacing: 0; text-transform: none; }
+.req-field input, .req-field select {
+  box-sizing: border-box; width: 100%; min-height: 44px; border: 1px solid transparent;
+  border-radius: var(--radius-btn); background: var(--paper-grey); color: var(--ink);
+  font-family: var(--font); font-size: 15px; padding: 10px 12px;
+}
+.req-field input:focus-visible, .req-field select:focus-visible { outline: 2px solid var(--ink); outline-offset: 1px; background: var(--white); }
+
+.req-picked { display: none; align-items: flex-start; gap: 12px; padding: 14px 16px; margin: 8px 0 4px; border: 1px solid var(--line); border-radius: var(--radius-card); background: var(--white); box-shadow: var(--shadow-card); }
+.req-picked.is-shown { display: flex; }
+.req-picked__pin { width: 14px; height: 14px; border-radius: 50%; background: var(--ink); border: 2px solid var(--white); box-shadow: 0 0 0 1px rgba(0,0,0,.1); flex-shrink: 0; margin-top: 3px; }
+.req-picked__pin.is-stocked { background: var(--hot-pink); }
+.req-picked__text { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.req-picked__namerow { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.req-picked__name { font-weight: 800; font-size: 16px; color: var(--ink); }
+.req-picked__badge { font-size: 9px; font-weight: 800; letter-spacing: .12em; background: var(--hot-pink); color: var(--ink); padding: 3px 8px; border-radius: var(--radius-pill); white-space: nowrap; }
+.req-picked__meta { font-size: 12px; color: var(--text-soft); }
+.req-picked__change { margin-left: auto; align-self: flex-start; min-width: 44px; min-height: 44px; border: 0; background: transparent; color: var(--ink); font-weight: 700; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; cursor: pointer; font-family: var(--font); text-decoration: underline; text-decoration-color: var(--hot-pink); text-underline-offset: 3px; }
+.req-affirm { margin: 12px 4px 4px; font-size: 13.5px; line-height: 1.5; color: var(--text-mid); }
+.req-affirm b { color: var(--ink); }
+
+.req-hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+.req-foot { padding: 16px 24px 20px; border-top: 1px solid var(--border); position: sticky; bottom: 0; z-index: 2; background: var(--white); flex-shrink: 0; }
+.req-status { min-height: 16px; font-size: 12.5px; font-family: var(--font); margin: 0 0 8px; text-align: center; }
+.req-submit {
+  width: 100%; border: 0; cursor: pointer; background: var(--hot-pink); color: var(--ink); font-family: var(--font);
+  font-weight: 700; font-size: 13px; letter-spacing: .12em; text-transform: uppercase; padding: 16px; border-radius: var(--radius-btn);
+  transition: background var(--transition-fast);
+}
+/* Stay on brand hot pink and dim it, matching .op-btn[aria-disabled] in
+   global.css. --soft-pink under an extra .7 alpha read as a different hue
+   next to the Request MWAH CTA. */
+.req-submit:disabled { background: var(--hot-pink); cursor: not-allowed; opacity: .55; }
+.req-submit:not(:disabled):hover { background: var(--hot-pink-hover); }
+.req-micro { font-size: 11.5px; color: var(--text-soft); text-align: center; margin: 10px 0 0; line-height: 1.4; }
+
+/* success */
+/* Sibling of .req-form inside the capped .req-modal, so it needs the same
+   scroll fallback: at ~260px of viewport it is 280px tall and .req-modal's
+   overflow:hidden was cutting the Done button off with no way to reach it. */
+.req-success { display: none; padding: 36px 28px 28px; text-align: center; min-height: 0; overflow-y: auto; }
+.req-success.is-shown { display: block; }
+.req-success__mark { width: 64px; height: 64px; border-radius: 50%; background: var(--hot-pink); color: var(--ink); display: flex; align-items: center; justify-content: center; margin: 0 auto 18px; font-size: 30px; }
+.req-success__title { font-family: var(--font); font-weight: 800; font-size: 22px; letter-spacing: -.02em; margin: 0 0 8px; color: var(--ink); }
+.req-success__sub { font-family: var(--font); font-size: 14px; color: var(--text-mid); line-height: 1.5; margin: 0 0 18px; }
+.req-done { border: 0; cursor: pointer; background: var(--ink); color: var(--white); font-family: var(--font); font-weight: 700; font-size: 13px; letter-spacing: .12em; text-transform: uppercase; padding: 14px 28px; border-radius: var(--radius-btn); }
+.req-done:hover { background: var(--ink-hover); }
+
+/* ===== Mobile (≤768) ===== */
+@media (max-width: 768px) {
+  /* Stack copy over a full-width button matching the SUBSCRIBE button. */
+  .req-cta { flex-direction: column; align-items: stretch; padding: 28px 20px; }
+  .req-cta__title { font-size: 20px; line-height: 1.2; } /* matches .op-signup__title mobile */
+  .req-cta__btn { width: 100%; box-sizing: border-box; height: 56px; } /* matches SUBSCRIBE mobile */
+  .req-modal { width: 100%; height: 92vh; border-radius: var(--radius-card); max-height: 92vh; }
+  .req-manual__row { grid-template-columns: 1fr; }
+}
+
+/* ===== Short viewports (≤560px tall) =====
+   Landscape phones, short desktop windows, and — the common case — any phone
+   where the soft keyboard shrinks the viewport the moment the shopper taps
+   the search field. Trim the non-essential chrome so the search and results
+   keep real room instead of being squeezed out by the head and foot. */
+@media (max-height: 560px) {
+  .req-head { padding: 14px 24px 10px; }
+  .req-title { font-size: 19px; margin: 6px 0 2px; }
+  .req-sub { display: none; }
+  .req-close { top: 8px; right: 8px; width: 40px; height: 40px; }
+  .req-list { max-height: none; }
+  .req-foot { padding: 12px 24px 14px; }
+  .req-status { min-height: 0; }
+  .req-status:empty { margin: 0; }
+  .req-submit { padding: 13px; }
+  .req-micro { display: none; }
+}

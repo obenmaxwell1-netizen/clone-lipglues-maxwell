@@ -1,0 +1,11 @@
+node_modules/
+setup/
+audit-images.js
+download-assets.js
+fix-verify.js
+fix.js
+fix2-images.js
+fix3-bypass.js
+fix4-posters.js
+.env
+.DS_Store

@@ -1,0 +1,129 @@
+/* Click-only Strawberry Matcha campaign film dialog. */
+
+.campaign-video[hidden] {
+  display: none !important;
+}
+
+.campaign-video {
+  position: fixed;
+  inset: 0;
+  z-index: 1300;
+  display: grid;
+  place-items: center;
+  padding: var(--sp-24);
+  font-family: var(--font);
+}
+
+.campaign-video__backdrop {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  padding: 0;
+  background: rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(8px);
+  opacity: 0;
+  transition: opacity var(--transition-mid);
+}
+
+.campaign-video__dialog {
+  position: relative;
+  z-index: 1;
+  width: min(1100px, 100%);
+  max-height: calc(100svh - var(--sp-48));
+  box-sizing: border-box;
+  overflow: auto;
+  padding: var(--sp-24);
+  border-radius: var(--radius-map);
+  background: var(--white);
+  box-shadow: var(--shadow-card);
+  opacity: 0;
+  transform: translateY(18px) scale(0.98);
+  transition: opacity var(--transition-mid), transform var(--transition-mid);
+}
+
+.campaign-video.is-open .campaign-video__backdrop,
+.campaign-video.is-open .campaign-video__dialog {
+  opacity: 1;
+}
+
+.campaign-video.is-open .campaign-video__dialog {
+  transform: translateY(0) scale(1);
+}
+
+.campaign-video__header {
+  padding: var(--sp-8) var(--sp-64) var(--sp-16) 0;
+}
+
+.campaign-video__eyebrow {
+  margin: 0 0 var(--sp-8);
+  color: var(--text-mid);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+}
+
+.campaign-video__title {
+  margin: 0;
+  color: var(--ink);
+  font-size: clamp(34px, 4vw, 52px);
+  font-weight: 800;
+  letter-spacing: -0.045em;
+  line-height: 0.95;
+}
+
+.campaign-video__close {
+  position: absolute;
+  top: var(--sp-16);
+  right: var(--sp-16);
+  min-width: 44px;
+  min-height: 44px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: var(--paper-grey);
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.campaign-video__player {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius-card);
+  background: var(--ink);
+}
+
+.campaign-video__status {
+  min-height: 20px;
+  margin: var(--sp-12) 0 0;
+  color: var(--text-mid);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+  .campaign-video {
+    padding: var(--sp-12);
+  }
+
+  .campaign-video__dialog {
+    max-height: calc(100svh - var(--sp-24));
+    padding: var(--sp-16);
+  }
+
+  .campaign-video__header {
+    padding: var(--sp-8) var(--sp-48) var(--sp-16) 0;
+  }
+
+  .campaign-video__title {
+    font-size: 36px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .campaign-video__backdrop,
+  .campaign-video__dialog {
+    transition: none;
+  }
+}

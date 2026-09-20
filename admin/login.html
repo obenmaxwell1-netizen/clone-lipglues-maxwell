@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MWAH Admin — Login</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --pink:   #e9517a;
+      --pink-d: #c83861;
+      --bg:     #0d0d0f;
+      --card:   #16161a;
+      --border: rgba(255,255,255,.08);
+      --text:   #f0eff4;
+      --muted:  #8f8fa3;
+      --red:    #e05252;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+    }
+
+    /* Animated background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 20% 20%, rgba(233,81,122,.12) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 60% at 80% 80%, rgba(140,80,200,.10) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .login-card {
+      position: relative;
+      z-index: 1;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 48px 40px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 32px 80px rgba(0,0,0,.5), 0 0 0 1px rgba(255,255,255,.04);
+      animation: slideUp .4s ease;
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .login-logo {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .login-logo svg {
+      width: 100px;
+      height: auto;
+      fill: var(--text);
+    }
+
+    .login-badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      color: var(--pink);
+      background: rgba(233,81,122,.12);
+      border: 1px solid rgba(233,81,122,.25);
+      padding: 4px 12px;
+      border-radius: 100px;
+      margin-top: 10px;
+    }
+
+    .login-title {
+      font-size: 22px;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    .login-sub {
+      font-size: 13px;
+      color: var(--muted);
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .08em;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 13px 16px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 14px;
+      outline: none;
+      transition: border-color .2s;
+    }
+
+    input:focus {
+      border-color: rgba(233,81,122,.5);
+    }
+
+    .btn-login {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, var(--pink) 0%, var(--pink-d) 100%);
+      color: #fff;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: opacity .2s, transform .15s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-login:hover { opacity: .92; }
+    .btn-login:active { transform: scale(.98); }
+    .btn-login:disabled { opacity: .5; cursor: not-allowed; }
+
+    .btn-login .spinner {
+      display: none;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255,255,255,.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+      margin: 0 auto;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .btn-login.loading .btn-text { display: none; }
+    .btn-login.loading .spinner { display: block; }
+
+    .error-msg {
+      margin-top: 14px;
+      padding: 12px 16px;
+      background: rgba(224,82,82,.1);
+      border: 1px solid rgba(224,82,82,.25);
+      border-radius: 8px;
+      color: var(--red);
+      font-size: 13px;
+      display: none;
+    }
+
+    .error-msg.show { display: block; }
+
+    .login-footer {
+      margin-top: 28px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--muted);
+      font-size: 12px;
+      text-decoration: none;
+      margin-top: 20px;
+      transition: color .2s;
+    }
+    .back-link:hover { color: var(--text); }
+  </style>
+</head>
+<body>
+  <div class="login-card">
+    <div class="login-logo">
+      <!-- MWAH wordmark SVG -->
+      <svg viewBox="0 0 467 94" aria-label="MWAH">
+        <path d="M79.62 93.68V39.31H78.9L52.65 83.06H46.91L20.66 39.31H19.94V93.68H0V0H19.65L50.35 51.36H50.64L81.2 0H100.28V93.68H79.62Z"/>
+        <path d="M143.06 0L160.99 61.54H161.85L181.07 0H196.13L215.21 61.54H216.07L234.14 0H255.66L225.68 93.68H206.17L188.53 38.02H187.67L170.17 93.68H150.66L120.68 0H143.06Z"/>
+        <path d="M300.65 0H318.3L361.77 93.68H339.25L330.64 73.88H287.32L278.86 93.68H257.2L300.67 0H300.65ZM294.34 57.67H323.6L309.4 24.53H308.54L294.34 57.67Z"/>
+        <path d="M381.08 93.68V0H401.74V34.72H445.92V0H466.58V93.68H445.92V52.08H401.74V93.68H381.08Z"/>
+      </svg>
+      <div class="login-badge">ADMIN</div>
+    </div>
+
+    <h1 class="login-title">Welcome back</h1>
+    <p class="login-sub">Sign in to manage your MWAH site</p>
+
+    <form id="loginForm" novalidate>
+      <div class="form-group">
+        <label for="email">EMAIL ADDRESS</label>
+        <input type="email" id="email" name="email" placeholder="admin@example.com" autocomplete="email" required>
+      </div>
+      <div class="form-group">
+        <label for="password">PASSWORD</label>
+        <input type="password" id="password" name="password" placeholder="••••••••" autocomplete="current-password" required>
+      </div>
+
+      <button type="submit" class="btn-login" id="loginBtn">
+        <span class="btn-text">SIGN IN</span>
+        <div class="spinner"></div>
+      </button>
+
+      <div class="error-msg" id="errorMsg"></div>
+    </form>
+
+    <div class="login-footer">
+      <a href="../MWAH _ Cannabis Vape Pens Designed for Her.html" class="back-link">
+        ← Back to website
+      </a>
+    </div>
+  </div>
+
+  <!-- Supabase JS -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script>
+    const SUPABASE_URL  = 'https://rrpxvsmggmgeilbynuij.supabase.co';
+    const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJycHh2c21nZ21nZWlsYnludWlqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk5MzE0NDAsImV4cCI6MjEwNTUwNzQ0MH0.NLv7ylLgLN5xvW5FBiG66ChHCpdYGCpATTy5_Mqtfhw';
+    const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+    // Redirect if already logged in
+    client.auth.getSession().then(({ data: { session } }) => {
+      if (session) window.location.href = 'index.html';
+    });
+
+    const form    = document.getElementById('loginForm');
+    const btn     = document.getElementById('loginBtn');
+    const errMsg  = document.getElementById('errorMsg');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email    = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+
+      btn.classList.add('loading');
+      btn.disabled = true;
+      errMsg.classList.remove('show');
+
+      const { error } = await client.auth.signInWithPassword({ email, password });
+
+      if (error) {
+        errMsg.textContent = error.message || 'Invalid credentials. Please try again.';
+        errMsg.classList.add('show');
+        btn.classList.remove('loading');
+        btn.disabled = false;
+      } else {
+        window.location.href = 'index.html';
+      }
+    });
+  </script>
+</body>
+</html>
