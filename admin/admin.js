@@ -169,10 +169,10 @@ async function loadOverview() {
 // ── PRODUCTS ─────────────────────────────────────────────────────────
 async function loadProducts() {
   const tbody = document.getElementById('productsTableBody');
-  tbody.innerHTML = '<tr><td colspan="6" class="loading-cell">Loading…</td></tr>';
+  tbody.innerHTML = '<tr><td colspan="7" class="loading-cell">Loading…</td></tr>';
 
   const { data, error } = await client.from('products').select('*').order('sort_order');
-  if (error) { tbody.innerHTML = `<tr><td colspan="6" class="loading-cell">Error: ${error.message}</td></tr>`; return; }
+  if (error) { tbody.innerHTML = `<tr><td colspan="7" class="loading-cell">Error: ${error.message}</td></tr>`; return; }
 
   tbody.innerHTML = data.map(p => `
     <tr>
@@ -187,6 +187,7 @@ async function loadProducts() {
       </td>
       <td>${typeBadge(p.type)}</td>
       <td style="color:var(--muted);max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escHtml(p.vibe || '—')}</td>
+      <td style="font-weight:700;color:#e75480">${p.price && parseFloat(p.price) > 0 ? '$' + parseFloat(p.price).toFixed(2) : '<span style="color:var(--muted);font-weight:400">—</span>'}</td>
       <td>${statusBadge(p.status)}</td>
       <td>${p.sort_order}</td>
       <td>
@@ -253,6 +254,10 @@ function productModal(product) {
     <div class="form-group">
       <label>Sort Order</label>
       <input type="number" id="f_order" value="${p.sort_order||0}" min="0">
+    </div>
+    <div class="form-group">
+      <label>Price (USD $) — displayed on product cards</label>
+      <input type="number" id="f_price" value="${p.price||0}" min="0" step="0.01" placeholder="e.g. 29.99" style="font-size:1rem;font-weight:700;color:#e75480">
     </div>`;
 
   openModal(isEdit ? 'Edit Product' : 'Add Product', html, async () => {
@@ -267,6 +272,7 @@ function productModal(product) {
       image_url:   document.getElementById('f_image').value.trim(),
       video_url:   document.getElementById('f_video').value.trim(),
       sort_order:  parseInt(document.getElementById('f_order').value) || 0,
+      price:       parseFloat(document.getElementById('f_price').value) || 0,
       updated_at:  new Date().toISOString(),
     };
     if (!payload.name || !payload.slug) { toast('Name and slug are required.', 'error'); return; }
