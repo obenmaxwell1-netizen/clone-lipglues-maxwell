@@ -346,7 +346,7 @@
       "</div>",
       '<div class="op-signup__confirm-body">',
       '<h3 class="op-signup__confirm-title">You’re on the list.</h3>',
-      '<p class="op-signup__confirm-msg">We’ll send MWAH updates here. Email <a href="mailto:info@gimmemwah.com">info@gimmemwah.com</a> to unsubscribe.</p>',
+      '<p class="op-signup__confirm-msg">We’ll send MWAH updates here. Email <a href="mailto:contact@gimmeemwah.com">contact@gimmeemwah.com</a> to unsubscribe.</p>',
       "</div>",
     ];
 
