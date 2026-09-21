@@ -325,14 +325,14 @@
 
     // Fallback products catalogue — always works even if Supabase is empty
     const CATALOGUE = [
-      { slug:'strawberry-matcha', name:'Strawberry Matcha',  type:'HYBRID', price:44, vibe:'Sweet strawberry. Creamy, earthy, smooth.',     moods:'MWAHcha Era · Green Flag · Ceremonials',             video:'/assets/img/products/strawberry-matcha.mp4',  poster:'/assets/img/products/strawberry-matcha.png', description:'Strawberry Matcha brings together the sweetness of ripe strawberries with the earthy, ceremonial depth of matcha. A smooth, well-balanced hybrid perfect for creative afternoons and elevated moments.' },
-      { slug:'watermelon-wifey',  name:'Watermelon Wifey',   type:'INDICA', price:45, vibe:'Juicy watermelon. Sweet, crisp, refreshing.',   moods:'Wifey Material · Ring Worthy · That Girl',            video:'/assets/img/products/watermelon-wifey.mp4',   poster:'/assets/img/products/watermelon-wifey.png',  description:'Watermelon Wifey is your go-to for a blissful, relaxed evening. Deeply sweet and refreshing with that cool watermelon finish — everything an indica should be.' },
-      { slug:'its-giving-guava',  name:"It's Giving Guava",  type:'SATIVA', price:40, vibe:'Crisp guava. Tropical, light, lifted.',         moods:'Main character · Boss babe · Big aura',               video:'/assets/img/products/guava.mp4',              poster:'/assets/img/products/guava.png',              description:"It's Giving Guava is pure sativa energy. Tropical, crisp, and bubbly — this one was made for main characters. Think beach days, big decisions, and even bigger auras." },
-      { slug:'berry-baddie',      name:'Berry Baddie',        type:'SATIVA', price:38, vibe:'Bold berries. Sweet, tart, electric.',          moods:'Main character · Social butterfly · Hot girl energy',  video:'/assets/img/products/berry.mp4',              poster:'/assets/img/products/berry.png',              description:'Berry Baddie hits bold and electric. A sativa built for social energy — tart berries, a sweet finish, and enough lift to keep you talking and laughing all night.' },
-      { slug:'mango-mamacita',    name:'Mango Mamacita',      type:'HYBRID', price:42, vibe:'Sun-kissed mango. Bright, juicy, lit.',         moods:'Bombshell energy · Good vibes · Golden hour',         video:'/assets/img/products/mango.mp4',              poster:'/assets/img/products/mango.png',              description:'Mango Mamacita is golden-hour in a pen. A hybrid that hits bright and juicy then eases into a warm, glowing calm. Perfect for sunsets, good playlists, and even better company.' },
-      { slug:'peach-perfection',  name:'Peach Perfection',    type:'HYBRID', price:41, vibe:'Fresh peach. Smooth, balanced, polished.',      moods:'Slow sip · Soft girl era · Main character glow',      video:'/assets/img/products/peach.mp4',              poster:'/assets/img/products/peach.png',              description:'Peach Perfection is the balanced, polished choice. A hybrid that leans smooth and steady — fresh peach flavor, effortless draw, and a calm confidence that carries you through the day.' },
-      { slug:'she-ate-strawberry', name:'She Ate Strawberry', type:'INDICA', price:40, vibe:'Strawberry cream. Soft, sweet, indulgent.',     moods:"Zero f's · Pillow princess · Bed rot",                video:'/assets/img/products/strawberry.mp4',         poster:'/assets/img/products/strawberry.png',         description:'She Ate Strawberry is pure comfort. Soft and sweet with a creamy strawberry finish — this indica was made for nights in, fuzzy blankets, and absolutely zero obligations.' },
-      { slug:'glow-up-grape',     name:'Glow Up Grape',       type:'INDICA', price:40, vibe:'Concord grape. Plush, jammy, slow.',            moods:'Do not disturb · Beauty rest · Unbothered',           video:'/assets/img/products/grape.mp4',              poster:'/assets/img/products/grape.png',              description:'Glow Up Grape is your beauty-sleep essential. Plush, slow, and impossibly relaxing — like sinking into your best self. An indica that truly earns the "do not disturb."' },
+      { slug:'strawberry-matcha', name:'Strawberry Matcha',  type:'HYBRID', price:44, vibe:'Sweet strawberry. Creamy, earthy, smooth.',     moods:'MWAHcha Era · Green Flag · Ceremonials',             poster:'/assets/img/products/strawberry-matcha.png', description:'Strawberry Matcha brings together the sweetness of ripe strawberries with the earthy, ceremonial depth of matcha. A smooth, well-balanced hybrid perfect for creative afternoons and elevated moments.' },
+      { slug:'watermelon-wifey',  name:'Watermelon Wifey',   type:'INDICA', price:45, vibe:'Juicy watermelon. Sweet, crisp, refreshing.',   moods:'Wifey Material · Ring Worthy · That Girl',            poster:'/assets/img/products/watermelon-wifey.png',  description:'Watermelon Wifey is your go-to for a blissful, relaxed evening. Deeply sweet and refreshing with that cool watermelon finish — everything an indica should be.' },
+      { slug:'its-giving-guava',  name:"It's Giving Guava",  type:'SATIVA', price:40, vibe:'Crisp guava. Tropical, light, lifted.',         moods:'Main character · Boss babe · Big aura',               poster:'/assets/img/products/guava.png',              description:"It's Giving Guava is pure sativa energy. Tropical, crisp, and bubbly — this one was made for main characters. Think beach days, big decisions, and even bigger auras." },
+      { slug:'berry-baddie',      name:'Berry Baddie',        type:'SATIVA', price:38, vibe:'Bold berries. Sweet, tart, electric.',          moods:'Main character · Social butterfly · Hot girl energy',  poster:'/assets/img/products/berry.png',              description:'Berry Baddie hits bold and electric. A sativa built for social energy — tart berries, a sweet finish, and enough lift to keep you talking and laughing all night.' },
+      { slug:'mango-mamacita',    name:'Mango Mamacita',      type:'HYBRID', price:42, vibe:'Sun-kissed mango. Bright, juicy, lit.',         moods:'Bombshell energy · Good vibes · Golden hour',         poster:'/assets/img/products/mango.png',              description:'Mango Mamacita is golden-hour in a pen. A hybrid that hits bright and juicy then eases into a warm, glowing calm. Perfect for sunsets, good playlists, and even better company.' },
+      { slug:'peach-perfection',  name:'Peach Perfection',    type:'HYBRID', price:41, vibe:'Fresh peach. Smooth, balanced, polished.',      moods:'Slow sip · Soft girl era · Main character glow',      poster:'/assets/img/products/peach.png',              description:'Peach Perfection is the balanced, polished choice. A hybrid that leans smooth and steady — fresh peach flavor, effortless draw, and a calm confidence that carries you through the day.' },
+      { slug:'she-ate-strawberry', name:'She Ate Strawberry', type:'INDICA', price:40, vibe:'Strawberry cream. Soft, sweet, indulgent.',     moods:"Zero f's · Pillow princess · Bed rot",                poster:'/assets/img/products/strawberry.png',         description:'She Ate Strawberry is pure comfort. Soft and sweet with a creamy strawberry finish — this indica was made for nights in, fuzzy blankets, and absolutely zero obligations.' },
+      { slug:'glow-up-grape',     name:'Glow Up Grape',       type:'INDICA', price:40, vibe:'Concord grape. Plush, jammy, slow.',            moods:'Do not disturb · Beauty rest · Unbothered',           poster:'/assets/img/products/grape.png',              description:'Glow Up Grape is your beauty-sleep essential. Plush, slow, and impossibly relaxing — like sinking into your best self. An indica that truly earns the "do not disturb."' },
     ];
 
     const params = new URLSearchParams(location.search);
@@ -364,7 +364,6 @@
               moods: db.moods || fb.moods,
               vibe:  db.vibe || fb.vibe,
               poster: db.image_url || fb.poster,
-              video:  db.video_url || fb.video,
             };
           });
         }
@@ -395,9 +394,8 @@
 
     function render(p, related) {
       const price = parseFloat(p.price) > 0 ? '$' + parseFloat(p.price).toFixed(2) : 'Price TBD';
-      const mediaEl = p.video
-        ? `<video class="pd-media__video" src="${p.video}" poster="${p.poster}" muted autoplay loop playsinline></video>`
-        : `<img class="pd-media__video" src="${p.poster}" alt="${p.name}" loading="eager">`;
+      // Always use img tag — mp4 files do not exist on this deployment
+      const mediaEl = `<img class="pd-media__video" src="${p.poster}" alt="${p.name}" loading="eager" onerror="this.style.display='none'">`;
 
       const moodTags = (p.moods || '').split('·').map(m => m.trim()).filter(Boolean).map(m =>
         `<span class="pd-moods__tag">${m}</span>`
@@ -408,9 +406,8 @@
           <h2 class="pd-related__title">You might also love</h2>
           <div class="pd-related__grid">
             ${related.map(r => {
-              const rMedia = r.video
-                ? `<video src="${r.video}" poster="${r.poster}" muted loop playsinline style="width:60%;height:140px;object-fit:contain;"></video>`
-                : `<img src="${r.poster}" alt="${r.name}" style="width:60%;height:140px;object-fit:contain;">`;
+              // Always use img for related cards
+              const rMedia = `<img src="${r.poster}" alt="${r.name}" style="width:60%;height:140px;object-fit:contain;" loading="lazy" onerror="this.style.display='none'">`;
               return `<a class="pd-rel-card" href="/product/?slug=${encodeURIComponent(r.slug)}">
                 <div class="pd-rel-card__media">${rMedia}</div>
                 <div class="pd-rel-card__body">
@@ -503,12 +500,7 @@
         });
       }
 
-      // Play related card videos on hover
-      page.querySelectorAll('.pd-rel-card video').forEach(v => {
-        const card = v.closest('.pd-rel-card');
-        card.addEventListener('mouseenter', () => v.play().catch(()=>{}));
-        card.addEventListener('mouseleave', () => { v.pause(); v.currentTime = 0; });
-      });
+      // No videos to play on hover (images only)
     }
 
     function showNotFound() {

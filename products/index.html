@@ -319,14 +319,14 @@
 
     // Fallback products if Supabase is empty
     const FALLBACK = [
-      { slug:'strawberry-matcha', name:'Strawberry Matcha',    type:'HYBRID', price:44, vibe:'Sweet strawberry. Creamy, earthy, smooth.',     moods:'MWAHcha Era · Green Flag · Ceremonials',         video:'./assets/img/products/strawberry-matcha.mp4', poster:'./assets/img/products/strawberry-matcha.png' },
-      { slug:'watermelon-wifey',  name:'Watermelon Wifey',     type:'INDICA', price:45, vibe:'Juicy watermelon. Sweet, crisp, refreshing.',   moods:'Wifey Material · Ring Worthy · That Girl',        video:'./assets/img/products/watermelon-wifey.mp4',  poster:'./assets/img/products/watermelon-wifey.png'  },
-      { slug:'its-giving-guava',  name:"It's Giving Guava",    type:'SATIVA', price:40, vibe:'Crisp guava. Tropical, light, lifted.',         moods:'Main character · Boss babe · Big aura',           video:'./assets/img/products/guava.mp4',             poster:'./assets/img/products/guava.png'             },
-      { slug:'berry-baddie',      name:'Berry Baddie',         type:'SATIVA', price:38, vibe:'Bold berries. Sweet, tart, electric.',          moods:'Main character · Social butterfly · Hot girl energy', video:'./assets/img/products/berry.mp4',          poster:'./assets/img/products/berry.png'             },
-      { slug:'mango-mamacita',    name:'Mango Mamacita',       type:'HYBRID', price:42, vibe:'Sun-kissed mango. Bright, juicy, lit.',         moods:'Bombshell energy · Good vibes · Golden hour',    video:'./assets/img/products/mango.mp4',             poster:'./assets/img/products/mango.png'             },
-      { slug:'peach-perfection',  name:'Peach Perfection',     type:'HYBRID', price:41, vibe:'Fresh peach. Smooth, balanced, polished.',      moods:'Slow sip · Soft girl era · Main character glow', video:'./assets/img/products/peach.mp4',             poster:'./assets/img/products/peach.png'             },
-      { slug:'she-ate-strawberry',name:'She Ate Strawberry',   type:'INDICA', price:40, vibe:'Strawberry cream. Soft, sweet, indulgent.',     moods:'Zero f\'s · Pillow princess · Bed rot',           video:'./assets/img/products/strawberry.mp4',        poster:'./assets/img/products/strawberry.png'        },
-      { slug:'glow-up-grape',     name:'Glow Up Grape',        type:'INDICA', price:40, vibe:'Concord grape. Plush, jammy, slow.',            moods:'Do not disturb · Beauty rest · Unbothered',      video:'./assets/img/products/grape.mp4',             poster:'./assets/img/products/grape.png'             },
+      { slug:'strawberry-matcha', name:'Strawberry Matcha',    type:'HYBRID', price:44, vibe:'Sweet strawberry. Creamy, earthy, smooth.',     moods:'MWAHcha Era · Green Flag · Ceremonials',             poster:'/assets/img/products/strawberry-matcha.png' },
+      { slug:'watermelon-wifey',  name:'Watermelon Wifey',     type:'INDICA', price:45, vibe:'Juicy watermelon. Sweet, crisp, refreshing.',   moods:'Wifey Material · Ring Worthy · That Girl',            poster:'/assets/img/products/watermelon-wifey.png'  },
+      { slug:'its-giving-guava',  name:"It's Giving Guava",    type:'SATIVA', price:40, vibe:'Crisp guava. Tropical, light, lifted.',         moods:'Main character · Boss babe · Big aura',               poster:'/assets/img/products/guava.png'             },
+      { slug:'berry-baddie',      name:'Berry Baddie',         type:'SATIVA', price:38, vibe:'Bold berries. Sweet, tart, electric.',          moods:'Main character · Social butterfly · Hot girl energy', poster:'/assets/img/products/berry.png'             },
+      { slug:'mango-mamacita',    name:'Mango Mamacita',       type:'HYBRID', price:42, vibe:'Sun-kissed mango. Bright, juicy, lit.',         moods:'Bombshell energy · Good vibes · Golden hour',         poster:'/assets/img/products/mango.png'             },
+      { slug:'peach-perfection',  name:'Peach Perfection',     type:'HYBRID', price:41, vibe:'Fresh peach. Smooth, balanced, polished.',      moods:'Slow sip · Soft girl era · Main character glow',      poster:'/assets/img/products/peach.png'             },
+      { slug:'she-ate-strawberry',name:'She Ate Strawberry',   type:'INDICA', price:40, vibe:'Strawberry cream. Soft, sweet, indulgent.',     moods:"Zero f's · Pillow princess · Bed rot",               poster:'/assets/img/products/strawberry.png'        },
+      { slug:'glow-up-grape',     name:'Glow Up Grape',        type:'INDICA', price:40, vibe:'Concord grape. Plush, jammy, slow.',            moods:'Do not disturb · Beauty rest · Unbothered',          poster:'/assets/img/products/grape.png'             },
     ];
 
     const grid = document.getElementById('catalogGrid');
@@ -343,7 +343,6 @@
         if (Array.isArray(data) && data.length > 0) {
           allProducts = data.map(p => ({
             ...p,
-            video:  p.video_url  || FALLBACK.find(f => f.slug === p.slug)?.video  || '',
             poster: p.image_url  || FALLBACK.find(f => f.slug === p.slug)?.poster || '',
             vibe:   p.description|| FALLBACK.find(f => f.slug === p.slug)?.vibe   || '',
             moods:  p.moods      || FALLBACK.find(f => f.slug === p.slug)?.moods  || '',
@@ -378,10 +377,9 @@
 
       grid.innerHTML = filtered.map(p => {
         const price = parseFloat(p.price) > 0 ? '$' + parseFloat(p.price).toFixed(2) : 'Price TBD';
-        const mediaEl = p.video
-          ? `<video class="pcard__video" src="${p.video}" poster="${p.poster}" muted loop playsinline preload="none"></video>`
-          : p.poster
-          ? `<img class="pcard__video" src="${p.poster}" alt="${p.name}" loading="lazy" style="object-fit:contain;">`
+        // Always use img — no mp4 files exist on this deployment
+        const mediaEl = p.poster
+          ? `<img class="pcard__video" src="${p.poster}" alt="${p.name}" loading="lazy" onerror="this.style.opacity='0'">`
           : `<div style="font-size:3rem;">💋</div>`;
 
         return `<a class="pcard" href="/product/?slug=${encodeURIComponent(p.slug)}" data-type="${(p.type||'hybrid').toLowerCase()}">
@@ -402,20 +400,7 @@
         </a>`;
       }).join('');
 
-      // Lazy load videos on scroll
-      const observer = new IntersectionObserver(entries => {
-        entries.forEach(e => {
-          if (e.isIntersecting) {
-            const vid = e.target;
-            if (!vid.src && vid.dataset.src) vid.src = vid.dataset.src;
-            vid.play().catch(()=>{});
-          }
-        });
-      }, { threshold: 0.3 });
-
-      grid.querySelectorAll('.pcard__video[src]').forEach(v => {
-        if (v.tagName === 'VIDEO') { observer.observe(v); v.play().catch(()=>{}); }
-      });
+      // Images don't need scroll observers — just loaded via img src
     }
 
     // Filter buttons
