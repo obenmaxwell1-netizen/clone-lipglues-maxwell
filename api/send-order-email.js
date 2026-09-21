@@ -7,7 +7,7 @@
 const RESEND_ENDPOINT = 'https://api.resend.com/emails';
 const ADMIN_EMAIL     = 'contact@gimmeemwah.com';
 const FROM_NAME       = 'MWAH';
-const FROM_ADDRESS    = 'orders@gimmeemwah.com';
+const FROM_ADDRESS    = 'contact@gimmeemwah.com';
 
 module.exports = async function handler(req, res) {
   // Only allow POST
