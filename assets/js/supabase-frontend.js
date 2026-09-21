@@ -8,7 +8,7 @@
 
   const SUPABASE_URL  = 'https://rrpxvsmggmgeilbynuij.supabase.co';
   const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJycHh2c21nZ21nZWlsYnludWlqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk5MzE0NDAsImV4cCI6MjEwNTUwNzQ0MH0.NLv7ylLgLN5xvW5FBiG66ChHCpdYGCpATTy5_Mqtfhw';
-  const MIN_ORDER     = 120;
+  const MIN_ORDER     = 99.98;
 
   const SLUG_MAP = {
     'strawberry-matcha': 'strawberry-matcha',
@@ -23,12 +23,9 @@
 
   const PAYMENT_METHODS = [
     { id: 'chime',         name: 'Chime',        icon: '💚', hint: 'Send via Chime app' },
-    { id: 'bank_transfer', name: 'Bank Transfer', icon: '🏦', hint: 'Direct bank wire' },
-    { id: 'wise',          name: 'Wise',          icon: '🌍', hint: 'Send via Wise' },
-    { id: 'crypto',        name: 'Crypto',        icon: '₿',  hint: 'BTC / ETH / USDT' },
     { id: 'zelle',         name: 'Zelle',         icon: '⚡', hint: 'Send via Zelle' },
-    { id: 'google_pay',    name: 'Google Pay',    icon: '🇬',  hint: 'Google Pay' },
     { id: 'apple_pay',     name: 'Apple Pay',     icon: '🍎', hint: 'Apple Pay' },
+    { id: 'gift_card',     name: 'Gift Card',     icon: '🎁', hint: 'Pay with a Gift Card' },
   ];
 
   // ── Fetch wrapper ─────────────────────────────────────────
