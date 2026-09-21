@@ -380,12 +380,14 @@
 
       grid.innerHTML = filtered.map(p => {
         const price = parseFloat(p.price) > 0 ? '$' + parseFloat(p.price).toFixed(2) : 'Price TBD';
-        // Always use img — no mp4 files exist on this deployment
         const mediaEl = p.poster
           ? `<img class="pcard__video" src="${p.poster}" alt="${p.name}" loading="lazy" onerror="this.style.opacity='0'">`
           : `<div style="font-size:3rem;">💋</div>`;
 
-        return `<a class="pcard" href="/product/?slug=${encodeURIComponent(p.slug)}" data-type="${(p.type||'hybrid').toLowerCase()}">
+        // Stringify product safely for onClick handler
+        const safeP = JSON.stringify({ slug: p.slug, name: p.name, type: p.type||'', price: parseFloat(p.price)||0, poster: p.poster||'' }).replace(/"/g, '&quot;');
+
+        return `<div class="pcard" data-href="/product/?slug=${encodeURIComponent(p.slug)}" data-type="${(p.type||'hybrid').toLowerCase()}">
           <div class="pcard__media">
             ${mediaEl}
             <span class="pcard__chip ${chipClass(p.type)}">${p.type||'HYBRID'}</span>
@@ -398,13 +400,39 @@
           </div>
           <div class="pcard__footer">
             <span class="pcard__price">${price}</span>
-            <span class="pcard__cta">View Product <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            <button class="pcard__cta" type="button" onclick="handleCatAdd(event, ${safeP}, this)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> ADD TO BAG
+            </button>
           </div>
-        </a>`;
+        </div>`;
       }).join('');
 
-      // Images don't need scroll observers — just loaded via img src
+      // Attach click listeners for card navigation
+      grid.querySelectorAll('.pcard').forEach(card => {
+        card.addEventListener('click', (e) => {
+          if (!e.target.closest('.pcard__cta')) {
+            window.location.href = card.dataset.href;
+          }
+        });
+      });
     }
+
+    // Global handler for catalog add to bag
+    window.handleCatAdd = function(e, p, btn) {
+      e.preventDefault();
+      e.stopPropagation();
+      const item = { slug: p.slug, name: p.name, type: p.type, price: p.price, image: p.poster };
+      if (typeof window.mwahCart !== 'undefined' && typeof window.mwahCart.add === 'function') {
+        window.mwahCart.add(item);
+        btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> ADDED!`;
+        btn.classList.add('added');
+        setTimeout(() => {
+          btn.classList.remove('added');
+          btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> ADD TO BAG`;
+        }, 1500);
+        setTimeout(() => window.mwahCart.open(), 300);
+      }
+    };
 
     // Filter buttons
     document.querySelectorAll('.filter-btn').forEach(btn => {

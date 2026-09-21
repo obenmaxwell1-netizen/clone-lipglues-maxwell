@@ -772,6 +772,7 @@
       updateQty: updateQty,
       remove:    removeFromCart,
       checkout:  openCheckout,
+      add:       addToCart,
     };
 
     initSignups();
