@@ -341,11 +341,13 @@
         });
         const data = await res.json();
         if (Array.isArray(data) && data.length > 0) {
+          // Always normalise image URL to absolute path
+          const fixUrl = u => (!u ? '' : (u.startsWith('/') || u.startsWith('http') ? u : '/' + u));
           allProducts = data.map(p => ({
             ...p,
-            poster: p.image_url  || FALLBACK.find(f => f.slug === p.slug)?.poster || '',
-            vibe:   p.description|| FALLBACK.find(f => f.slug === p.slug)?.vibe   || '',
-            moods:  p.moods      || FALLBACK.find(f => f.slug === p.slug)?.moods  || '',
+            poster: fixUrl(p.image_url) || FALLBACK.find(f => f.slug === p.slug)?.poster || '',
+            vibe:   p.description || FALLBACK.find(f => f.slug === p.slug)?.vibe   || '',
+            moods:  p.moods       || FALLBACK.find(f => f.slug === p.slug)?.moods  || '',
           }));
         } else {
           allProducts = FALLBACK;
