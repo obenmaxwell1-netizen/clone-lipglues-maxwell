@@ -44,21 +44,14 @@
     // the always-visible header earned a follow or merely moved a tap
     // that would have happened in the drawer anyway.
     function socialsFor(location) { return [
-      '<a class="op-nav__ig" href="https://instagram.com/gimmemwah" aria-label="Instagram (opens in new tab)" target="_blank" rel="noopener noreferrer" data-analytics-platform="instagram" data-analytics-location="' + location + '">',
-        '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">',
-          '<rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>',
-          '<path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>',
-          '<line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>',
-        '</svg>',
-      '</a>',
-      '<a class="op-nav__ig" href="https://x.com/gimmemwah" aria-label="X (opens in new tab)" target="_blank" rel="noopener noreferrer" data-analytics-platform="x" data-analytics-location="' + location + '">',
-        '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">',
-          '<path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.45-6.231Zm-1.161 17.52h1.833L7.084 4.126H5.117l11.966 15.644Z"/>',
-        '</svg>',
-      '</a>',
-      '<a class="op-nav__ig" href="https://www.tiktok.com/@gimmemwah" aria-label="TikTok (opens in new tab)" target="_blank" rel="noopener noreferrer" data-analytics-platform="tiktok" data-analytics-location="' + location + '">',
+      '<a class="op-nav__ig" href="https://www.tiktok.com/@gimmeemwahh?_r=1&_t=ZP-99u1fW9hVRX" aria-label="TikTok (opens in new tab)" target="_blank" rel="noopener noreferrer" data-analytics-platform="tiktok" data-analytics-location="' + location + '">',
         '<svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true">',
           '<path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5.8 20.1a6.34 6.34 0 0 0 10.86-4.43V8.51a8.16 8.16 0 0 0 4.77 1.52V6.59a4.85 4.85 0 0 1-1.84.1Z"/>',
+        '</svg>',
+      '</a>',
+      '<a class="op-nav__ig" href="https://t.me/gimmemwhah" aria-label="Telegram (opens in new tab)" target="_blank" rel="noopener noreferrer" data-analytics-platform="telegram" data-analytics-location="' + location + '">',
+        '<svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true">',
+          '<path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.248-1.97 9.289c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L6.278 14.445l-2.937-.924c-.638-.198-.651-.638.136-.944l11.462-4.42c.532-.194.998.13.623 2.091z"/>',
         '</svg>',
       '</a>',
       ].join("");
