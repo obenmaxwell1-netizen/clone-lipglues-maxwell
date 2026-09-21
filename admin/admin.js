@@ -246,12 +246,16 @@ function productModal(product) {
       <textarea id="f_description">${escHtml(p.description||'')}</textarea>
     </div>
     <div class="form-group">
-      <label>Image URL</label>
-      <input type="text" id="f_image" value="${escHtml(p.image_url||'')}" placeholder="./assets/img/products/name.png">
+      <label>Product Image (Upload)</label>
+      <input type="file" id="f_image_file" accept="image/*" style="background:var(--surface2);color:#fff;padding:8px">
+      <input type="hidden" id="f_image" value="${escHtml(p.image_url||'')}">
+      ${p.image_url ? `<div style="font-size:0.75rem;margin-top:4px;color:var(--muted)">Current: <a href="${escHtml(p.image_url)}" target="_blank" style="color:var(--pink)">View Image</a></div>` : ''}
     </div>
     <div class="form-group">
-      <label>Video URL</label>
-      <input type="text" id="f_video" value="${escHtml(p.video_url||'')}" placeholder="./assets/img/products/name.mp4">
+      <label>Product Video (Upload)</label>
+      <input type="file" id="f_video_file" accept="video/*" style="background:var(--surface2);color:#fff;padding:8px">
+      <input type="hidden" id="f_video" value="${escHtml(p.video_url||'')}">
+      ${p.video_url ? `<div style="font-size:0.75rem;margin-top:4px;color:var(--muted)">Current: <a href="${escHtml(p.video_url)}" target="_blank" style="color:var(--pink)">View Video</a></div>` : ''}
     </div>
     <div class="form-group">
       <label>Sort Order</label>
@@ -263,28 +267,70 @@ function productModal(product) {
     </div>`;
 
   openModal(isEdit ? 'Edit Product' : 'Add Product', html, async () => {
-    const payload = {
-      name:        document.getElementById('f_name').value.trim(),
-      slug:        document.getElementById('f_slug').value.trim().toLowerCase().replace(/\s+/g,'-'),
-      type:        document.getElementById('f_type').value,
-      status:      document.getElementById('f_status').value,
-      vibe:        document.getElementById('f_vibe').value.trim(),
-      moods:       document.getElementById('f_moods').value.trim(),
-      description: document.getElementById('f_description').value.trim(),
-      image_url:   document.getElementById('f_image').value.trim(),
-      video_url:   document.getElementById('f_video').value.trim(),
-      sort_order:  parseInt(document.getElementById('f_order').value) || 0,
-      price:       parseFloat(document.getElementById('f_price').value) || 0,
-      updated_at:  new Date().toISOString(),
-    };
-    if (!payload.name || !payload.slug) { toast('Name and slug are required.', 'error'); return; }
-    const { error } = isEdit
-      ? await client.from('products').update(payload).eq('id', p.id)
-      : await client.from('products').insert(payload);
-    if (error) { toast('Error: ' + error.message, 'error'); return; }
-    toast(isEdit ? 'Product updated!' : 'Product added!');
-    closeModal();
-    loadProducts();
+    const saveBtn = document.getElementById('modalSave');
+    const originalText = saveBtn.textContent;
+    saveBtn.textContent = 'Saving...';
+    saveBtn.disabled = true;
+
+    try {
+      let imgUrl = document.getElementById('f_image').value.trim();
+      let vidUrl = document.getElementById('f_video').value.trim();
+
+      const imgFile = document.getElementById('f_image_file').files[0];
+      const vidFile = document.getElementById('f_video_file').files[0];
+
+      if (imgFile) {
+        saveBtn.textContent = 'Uploading Image...';
+        const fileExt = imgFile.name.split('.').pop();
+        const fileName = `${Date.now()}-img.${fileExt}`;
+        const { data, error } = await client.storage.from('media').upload(`products/${fileName}`, imgFile);
+        if (error) throw new Error('Image upload failed: ' + error.message);
+        const { data: pubData } = client.storage.from('media').getPublicUrl(`products/${fileName}`);
+        imgUrl = pubData.publicUrl;
+      }
+
+      if (vidFile) {
+        saveBtn.textContent = 'Uploading Video...';
+        const fileExt = vidFile.name.split('.').pop();
+        const fileName = `${Date.now()}-vid.${fileExt}`;
+        const { data, error } = await client.storage.from('media').upload(`products/${fileName}`, vidFile);
+        if (error) throw new Error('Video upload failed: ' + error.message);
+        const { data: pubData } = client.storage.from('media').getPublicUrl(`products/${fileName}`);
+        vidUrl = pubData.publicUrl;
+      }
+
+      saveBtn.textContent = 'Saving Product...';
+      const payload = {
+        name:        document.getElementById('f_name').value.trim(),
+        slug:        document.getElementById('f_slug').value.trim().toLowerCase().replace(/\s+/g,'-'),
+        type:        document.getElementById('f_type').value,
+        status:      document.getElementById('f_status').value,
+        vibe:        document.getElementById('f_vibe').value.trim(),
+        moods:       document.getElementById('f_moods').value.trim(),
+        description: document.getElementById('f_description').value.trim(),
+        image_url:   imgUrl,
+        video_url:   vidUrl,
+        sort_order:  parseInt(document.getElementById('f_order').value) || 0,
+        price:       parseFloat(document.getElementById('f_price').value) || 0,
+        updated_at:  new Date().toISOString(),
+      };
+      if (!payload.name || !payload.slug) { toast('Name and slug are required.', 'error'); return; }
+      
+      const { error } = isEdit
+        ? await client.from('products').update(payload).eq('id', p.id)
+        : await client.from('products').insert(payload);
+        
+      if (error) throw error;
+      
+      toast(isEdit ? 'Product updated!' : 'Product added!');
+      closeModal();
+      loadProducts();
+    } catch (e) {
+      toast(e.message, 'error');
+    } finally {
+      saveBtn.textContent = originalText;
+      saveBtn.disabled = false;
+    }
   });
 }
 
