@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+  <title>All Products | MWAH</title>
+  <meta name="description" content="Browse all 8 MWAH lip-gloss-shaped cannabis vape pens. Filter by strain: Indica, Sativa, or Hybrid. Available at licensed retailers.">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="canonical" href="https://gimmeemwah.com/products">
+  <link rel="stylesheet" href="/MWAH _ Cannabis Vape Pens Designed for Her_files/home.css">
+  <link rel="stylesheet" href="/MWAH _ Cannabis Vape Pens Designed for Her_files/footer.css">
+  <link rel="stylesheet" href="/assets/css/pages.css">
+  <link rel="stylesheet" href="/assets/css/cart.css">
+  <link rel="stylesheet" href="/assets/css/checkout.css">
+  <style>
+    /* ── Products Catalog Page ─────────────────────────── */
+    .catalog-hero {
+      position: relative;
+      background: linear-gradient(135deg, #0d0d0d 0%, #1a0a10 50%, #0d0d0d 100%);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      padding: 72px 24px 48px;
+      text-align: center;
+      overflow: hidden;
+    }
+    .catalog-hero::before {
+      content: '';
+      position: absolute;
+      top: -40%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(231,84,128,0.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .catalog-hero__eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #e75480;
+      margin-bottom: 16px;
+    }
+    .catalog-hero__eyebrow::before,
+    .catalog-hero__eyebrow::after {
+      content: '';
+      display: block;
+      width: 24px;
+      height: 1px;
+      background: #e75480;
+      opacity: 0.5;
+    }
+    .catalog-hero__title {
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      line-height: 1;
+      color: #fff;
+      margin-bottom: 16px;
+    }
+    .catalog-hero__sub {
+      font-size: 1.05rem;
+      color: #bbb;
+      margin-bottom: 0;
+      font-weight: 400;
+    }
+
+    /* ── Filters ───────────────────────────────────────── */
+    .catalog-filters {
+      background: #111;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      position: sticky;
+      top: 72px;
+      z-index: 50;
+    }
+    .catalog-filters__label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #666;
+      margin-right: 8px;
+    }
+    .filter-btn {
+      padding: 8px 20px;
+      border-radius: 50px;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: transparent;
+      color: #bbb;
+      font-family: inherit;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .filter-btn:hover {
+      border-color: #e75480;
+      color: #e75480;
+    }
+    .filter-btn.active {
+      background: #e75480;
+      border-color: #e75480;
+      color: #fff;
+    }
+
+    /* ── Count badge ───────────────────────────────────── */
+    .catalog-count {
+      max-width: 1200px;
+      margin: 32px auto 0;
+      padding: 0 24px;
+      font-size: 0.82rem;
+      color: #666;
+      letter-spacing: 0.05em;
+    }
+
+    /* ── Product Grid ──────────────────────────────────── */
+    .catalog-grid {
+      max-width: 1200px;
+      margin: 24px auto 80px;
+      padding: 0 24px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 24px;
+    }
+
+    /* ── Product Card ──────────────────────────────────── */
+    .pcard {
+      background: #111;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform .25s, border-color .25s, box-shadow .25s;
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+    }
+    .pcard:hover {
+      transform: translateY(-4px);
+      border-color: rgba(231,84,128,0.4);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.4);
+    }
+    .pcard.hidden { display: none; }
+
+    .pcard__media {
+      position: relative;
+      background: #fff;
+      height: 280px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .pcard__video {
+      width: 140px;
+      height: 220px;
+      object-fit: contain;
+    }
+    .pcard__chip {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: rgba(0,0,0,0.7);
+      color: #fff;
+      font-size: 0.65rem;
+      font-weight: 800;
+      letter-spacing: 0.15em;
+      padding: 4px 10px;
+      border-radius: 50px;
+    }
+    .pcard__chip--indica  { background: rgba(88,44,140,0.85); }
+    .pcard__chip--sativa  { background: rgba(231,140,44,0.85); }
+    .pcard__chip--hybrid  { background: rgba(231,84,128,0.85); }
+
+    .pcard__body {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex: 1;
+    }
+    .pcard__eyebrow {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #666;
+    }
+    .pcard__name {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
+    .pcard__vibe {
+      font-size: 0.88rem;
+      color: #888;
+      line-height: 1.5;
+    }
+    .pcard__moods {
+      font-size: 0.75rem;
+      color: #e75480;
+      font-weight: 600;
+    }
+    .pcard__footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      border-top: 1px solid rgba(255,255,255,0.07);
+      margin-top: auto;
+    }
+    .pcard__price {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #e75480;
+    }
+    .pcard__cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      color: #bbb;
+      text-transform: uppercase;
+    }
+    .pcard:hover .pcard__cta { color: #e75480; }
+    .pcard__cta svg { transition: transform .2s; }
+    .pcard:hover .pcard__cta svg { transform: translateX(3px); }
+
+    /* ── Loading skeleton ──────────────────────────────── */
+    .catalog-loading {
+      grid-column: 1 / -1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      padding: 80px 0;
+      color: #555;
+    }
+    .catalog-loading__spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid rgba(255,255,255,0.08);
+      border-top-color: #e75480;
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Empty state ───────────────────────────────────── */
+    .catalog-empty {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 80px 0;
+      color: #555;
+    }
+    .catalog-empty p { font-size: 1rem; margin-top: 12px; }
+
+    @media (max-width: 600px) {
+      .catalog-grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
+      .catalog-filters { top: 64px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header data-nav></header>
+
+  <!-- HERO -->
+  <section class="catalog-hero">
+    <p class="catalog-hero__eyebrow">THE COLLECTION</p>
+    <h1 class="catalog-hero__title">All Products</h1>
+    <p class="catalog-hero__sub">Eight flavors. 1g all-in-one cannabis vape pens designed for her.</p>
+  </section>
+
+  <!-- FILTERS -->
+  <div class="catalog-filters">
+    <span class="catalog-filters__label">Filter:</span>
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="indica">Indica</button>
+    <button class="filter-btn" data-filter="sativa">Sativa</button>
+    <button class="filter-btn" data-filter="hybrid">Hybrid</button>
+  </div>
+
+  <p class="catalog-count" id="catalogCount"></p>
+
+  <!-- GRID -->
+  <div class="catalog-grid" id="catalogGrid">
+    <div class="catalog-loading">
+      <div class="catalog-loading__spinner"></div>
+      <span>Loading the collection…</span>
+    </div>
+  </div>
+
+  <footer data-footer></footer>
+
+  <script src="/MWAH _ Cannabis Vape Pens Designed for Her_files/nav.js"></script>
+  <script src="/MWAH _ Cannabis Vape Pens Designed for Her_files/footer.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="/assets/js/supabase-frontend.js"></script>
+  <script>
+  (function() {
+    const SUPABASE_URL  = 'https://rrpxvsmggmgeilbynuij.supabase.co';
+    const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJycHh2c21nZ21nZWlsYnludWlqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk5MzE0NDAsImV4cCI6MjEwNTUwNzQ0MH0.NLv7ylLgLN5xvW5FBiG66ChHCpdYGCpATTy5_Mqtfhw';
+
+    // Fallback products if Supabase is empty
+    const FALLBACK = [
+      { slug:'strawberry-matcha', name:'Strawberry Matcha',    type:'HYBRID', price:44, vibe:'Sweet strawberry. Creamy, earthy, smooth.',     moods:'MWAHcha Era · Green Flag · Ceremonials',         video:'./assets/img/products/strawberry-matcha.mp4', poster:'./assets/img/products/strawberry-matcha.png' },
+      { slug:'watermelon-wifey',  name:'Watermelon Wifey',     type:'INDICA', price:45, vibe:'Juicy watermelon. Sweet, crisp, refreshing.',   moods:'Wifey Material · Ring Worthy · That Girl',        video:'./assets/img/products/watermelon-wifey.mp4',  poster:'./assets/img/products/watermelon-wifey.png'  },
+      { slug:'its-giving-guava',  name:"It's Giving Guava",    type:'SATIVA', price:40, vibe:'Crisp guava. Tropical, light, lifted.',         moods:'Main character · Boss babe · Big aura',           video:'./assets/img/products/guava.mp4',             poster:'./assets/img/products/guava.png'             },
+      { slug:'berry-baddie',      name:'Berry Baddie',         type:'SATIVA', price:38, vibe:'Bold berries. Sweet, tart, electric.',          moods:'Main character · Social butterfly · Hot girl energy', video:'./assets/img/products/berry.mp4',          poster:'./assets/img/products/berry.png'             },
+      { slug:'mango-mamacita',    name:'Mango Mamacita',       type:'HYBRID', price:42, vibe:'Sun-kissed mango. Bright, juicy, lit.',         moods:'Bombshell energy · Good vibes · Golden hour',    video:'./assets/img/products/mango.mp4',             poster:'./assets/img/products/mango.png'             },
+      { slug:'peach-perfection',  name:'Peach Perfection',     type:'HYBRID', price:41, vibe:'Fresh peach. Smooth, balanced, polished.',      moods:'Slow sip · Soft girl era · Main character glow', video:'./assets/img/products/peach.mp4',             poster:'./assets/img/products/peach.png'             },
+      { slug:'she-ate-strawberry',name:'She Ate Strawberry',   type:'INDICA', price:40, vibe:'Strawberry cream. Soft, sweet, indulgent.',     moods:'Zero f\'s · Pillow princess · Bed rot',           video:'./assets/img/products/strawberry.mp4',        poster:'./assets/img/products/strawberry.png'        },
+      { slug:'glow-up-grape',     name:'Glow Up Grape',        type:'INDICA', price:40, vibe:'Concord grape. Plush, jammy, slow.',            moods:'Do not disturb · Beauty rest · Unbothered',      video:'./assets/img/products/grape.mp4',             poster:'./assets/img/products/grape.png'             },
+    ];
+
+    const grid = document.getElementById('catalogGrid');
+    const countEl = document.getElementById('catalogCount');
+    let allProducts = [];
+    let activeFilter = 'all';
+
+    async function loadProducts() {
+      try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/products?select=*&status=eq.active`, {
+          headers: { 'apikey': SUPABASE_ANON, 'Authorization': `Bearer ${SUPABASE_ANON}` }
+        });
+        const data = await res.json();
+        if (Array.isArray(data) && data.length > 0) {
+          allProducts = data.map(p => ({
+            ...p,
+            video:  p.video_url  || FALLBACK.find(f => f.slug === p.slug)?.video  || '',
+            poster: p.image_url  || FALLBACK.find(f => f.slug === p.slug)?.poster || '',
+            vibe:   p.description|| FALLBACK.find(f => f.slug === p.slug)?.vibe   || '',
+            moods:  p.moods      || FALLBACK.find(f => f.slug === p.slug)?.moods  || '',
+          }));
+        } else {
+          allProducts = FALLBACK;
+        }
+      } catch(e) {
+        allProducts = FALLBACK;
+      }
+      render();
+    }
+
+    function chipClass(type) {
+      const t = (type||'').toLowerCase();
+      if (t === 'indica') return 'pcard__chip--indica';
+      if (t === 'sativa') return 'pcard__chip--sativa';
+      return 'pcard__chip--hybrid';
+    }
+
+    function render() {
+      const filtered = activeFilter === 'all'
+        ? allProducts
+        : allProducts.filter(p => (p.type||'').toLowerCase() === activeFilter);
+
+      countEl.textContent = `Showing ${filtered.length} product${filtered.length !== 1 ? 's' : ''}`;
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `<div class="catalog-empty"><p>No products match this filter yet.</p></div>`;
+        return;
+      }
+
+      grid.innerHTML = filtered.map(p => {
+        const price = parseFloat(p.price) > 0 ? '$' + parseFloat(p.price).toFixed(2) : 'Price TBD';
+        const mediaEl = p.video
+          ? `<video class="pcard__video" src="${p.video}" poster="${p.poster}" muted loop playsinline preload="none"></video>`
+          : p.poster
+          ? `<img class="pcard__video" src="${p.poster}" alt="${p.name}" loading="lazy" style="object-fit:contain;">`
+          : `<div style="font-size:3rem;">💋</div>`;
+
+        return `<a class="pcard" href="/product/?slug=${encodeURIComponent(p.slug)}" data-type="${(p.type||'hybrid').toLowerCase()}">
+          <div class="pcard__media">
+            ${mediaEl}
+            <span class="pcard__chip ${chipClass(p.type)}">${p.type||'HYBRID'}</span>
+          </div>
+          <div class="pcard__body">
+            <p class="pcard__eyebrow">${p.type||'HYBRID'}</p>
+            <h2 class="pcard__name">${p.name}</h2>
+            <p class="pcard__vibe">${p.vibe||''}</p>
+            ${p.moods ? `<p class="pcard__moods">${p.moods}</p>` : ''}
+          </div>
+          <div class="pcard__footer">
+            <span class="pcard__price">${price}</span>
+            <span class="pcard__cta">View Product <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+          </div>
+        </a>`;
+      }).join('');
+
+      // Lazy load videos on scroll
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            const vid = e.target;
+            if (!vid.src && vid.dataset.src) vid.src = vid.dataset.src;
+            vid.play().catch(()=>{});
+          }
+        });
+      }, { threshold: 0.3 });
+
+      grid.querySelectorAll('.pcard__video[src]').forEach(v => {
+        if (v.tagName === 'VIDEO') { observer.observe(v); v.play().catch(()=>{}); }
+      });
+    }
+
+    // Filter buttons
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeFilter = btn.dataset.filter;
+        render();
+      });
+    });
+
+    loadProducts();
+  })();
+  </script>
+</body>
+</html>

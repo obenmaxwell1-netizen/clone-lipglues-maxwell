@@ -578,6 +578,27 @@
         // Don't double-inject
         if (shellEl.querySelector('.op-card__buy-overlay')) return;
 
+        // Make the card title + image area clickable → product detail page
+        const detailUrl = `/product/?slug=${encodeURIComponent(dbSlug)}`;
+
+        // Make the card title and info section navigate to detail page
+        if (infoEl) {
+          infoEl.style.cursor = 'pointer';
+          infoEl.addEventListener('click', (e) => {
+            if (!e.target.closest('.op-card__buy-overlay') && !e.target.closest('.op-card__add-to-cart')) {
+              window.location.href = detailUrl;
+            }
+          });
+        }
+
+        // Make clicking the shell image area navigate to detail page too
+        shellEl.style.cursor = 'pointer';
+        shellEl.addEventListener('click', (e) => {
+          if (!e.target.closest('.op-card__buy-overlay') && !e.target.closest('.op-card__add-to-cart')) {
+            window.location.href = detailUrl;
+          }
+        });
+
         // Build overlay bar at bottom of the card image box
         const overlay = document.createElement('div');
         overlay.className = 'op-card__buy-overlay';
@@ -590,6 +611,14 @@
           priceEl.textContent = 'Price TBD';
         }
         overlay.appendChild(priceEl);
+
+        // View detail link inside overlay
+        const viewLink = document.createElement('a');
+        viewLink.href = detailUrl;
+        viewLink.className = 'op-card__view-link';
+        viewLink.textContent = 'VIEW';
+        viewLink.setAttribute('aria-label', 'View ' + product.name);
+        overlay.appendChild(viewLink);
 
         const btn = document.createElement('button');
         btn.className = 'op-card__add-to-cart';

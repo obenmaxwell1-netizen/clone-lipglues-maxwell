@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+  <title>Product | MWAH</title>
+  <meta name="description" content="MWAH cannabis vape pen — beautiful, intentional, designed for her.">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/MWAH _ Cannabis Vape Pens Designed for Her_files/home.css">
+  <link rel="stylesheet" href="/MWAH _ Cannabis Vape Pens Designed for Her_files/footer.css">
+  <link rel="stylesheet" href="/assets/css/pages.css">
+  <link rel="stylesheet" href="/assets/css/cart.css">
+  <link rel="stylesheet" href="/assets/css/checkout.css">
+  <style>
+    /* ── Product Detail Page ──────────────────────────── */
+    .pd-loading {
+      min-height: 60vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      color: #555;
+    }
+    .pd-spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid rgba(255,255,255,0.08);
+      border-top-color: #e75480;
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Hero section ───────────────────────────────── */
+    .pd-hero {
+      max-width: 1080px;
+      margin: 40px auto 0;
+      padding: 0 24px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+    }
+    @media (max-width: 768px) {
+      .pd-hero { grid-template-columns: 1fr; gap: 32px; }
+    }
+
+    /* Left: media */
+    .pd-media {
+      position: relative;
+      background: #fff;
+      border-radius: 24px;
+      overflow: hidden;
+      aspect-ratio: 3/4;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.5);
+    }
+    .pd-media__video {
+      width: 55%;
+      height: 80%;
+      object-fit: contain;
+    }
+    .pd-media__chip {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      color: #fff;
+      font-size: 0.7rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      padding: 6px 14px;
+      border-radius: 50px;
+    }
+    .chip--indica  { background: rgba(88,44,140,0.9); }
+    .chip--sativa  { background: rgba(231,140,44,0.9); }
+    .chip--hybrid  { background: #e75480; }
+
+    /* Right: info */
+    .pd-info { display: flex; flex-direction: column; gap: 20px; }
+
+    .pd-breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.78rem;
+      color: #555;
+    }
+    .pd-breadcrumb a { color: #555; text-decoration: none; transition: color .15s; }
+    .pd-breadcrumb a:hover { color: #e75480; }
+    .pd-breadcrumb span { color: #333; }
+
+    .pd-eyebrow {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #e75480;
+    }
+    .pd-name {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+      color: #fff;
+      margin: 0;
+    }
+    .pd-vibe {
+      font-size: 1.05rem;
+      color: #bbb;
+      line-height: 1.6;
+    }
+    .pd-moods {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .pd-moods__tag {
+      padding: 5px 14px;
+      border-radius: 50px;
+      border: 1px solid rgba(255,255,255,0.12);
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #888;
+      letter-spacing: 0.04em;
+    }
+    .pd-price-row {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 20px 0;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .pd-price {
+      font-size: 2rem;
+      font-weight: 900;
+      color: #e75480;
+    }
+    .pd-add-btn {
+      flex: 1;
+      padding: 16px 24px;
+      background: linear-gradient(135deg, #e75480, #c73b68);
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: opacity .2s, transform .15s, box-shadow .2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .pd-add-btn:hover { opacity: 0.9; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(231,84,128,0.4); }
+    .pd-add-btn:active { transform: translateY(0); }
+    .pd-add-btn.added { background: linear-gradient(135deg, #28a745, #1a8a4a); }
+
+    /* Specs list */
+    .pd-specs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .pd-spec {
+      background: #111;
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 12px;
+      padding: 14px 16px;
+    }
+    .pd-spec__label {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #555;
+      margin-bottom: 4px;
+    }
+    .pd-spec__value {
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    /* ── Description section ──────────────────────────── */
+    .pd-body {
+      max-width: 1080px;
+      margin: 64px auto 0;
+      padding: 0 24px;
+    }
+    .pd-divider {
+      height: 1px;
+      background: rgba(255,255,255,0.08);
+      margin: 48px 0;
+    }
+
+    /* ── Related products ─────────────────────────────── */
+    .pd-related {
+      max-width: 1080px;
+      margin: 0 auto 80px;
+      padding: 0 24px;
+    }
+    .pd-related__title {
+      font-size: 1.6rem;
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: -0.02em;
+      margin-bottom: 28px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .pd-related__title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: rgba(255,255,255,0.08);
+    }
+    .pd-related__grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 16px;
+    }
+    .pd-rel-card {
+      background: #111;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      overflow: hidden;
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      transition: transform .2s, border-color .2s;
+    }
+    .pd-rel-card:hover { transform: translateY(-3px); border-color: rgba(231,84,128,0.35); }
+    .pd-rel-card__media {
+      background: #fff;
+      height: 180px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .pd-rel-card__media img,
+    .pd-rel-card__media video {
+      width: 60%;
+      height: 140px;
+      object-fit: contain;
+    }
+    .pd-rel-card__body { padding: 14px 16px 16px; }
+    .pd-rel-card__type {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #e75480;
+      margin-bottom: 4px;
+    }
+    .pd-rel-card__name {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+    .pd-rel-card__price {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #888;
+    }
+
+    /* ── Not found state ──────────────────────────────── */
+    .pd-not-found {
+      max-width: 500px;
+      margin: 80px auto;
+      text-align: center;
+      padding: 0 24px;
+    }
+    .pd-not-found h1 { font-size: 2rem; color: #fff; margin-bottom: 12px; }
+    .pd-not-found p { color: #888; margin-bottom: 28px; }
+    .pd-not-found a {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 28px;
+      background: #e75480;
+      color: #fff;
+      border-radius: 50px;
+      font-weight: 700;
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 600px) {
+      .pd-specs { grid-template-columns: 1fr; }
+      .pd-hero { margin-top: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header data-nav></header>
+
+  <div id="pdPage" style="padding-bottom:0;">
+    <div class="pd-loading" id="pdLoading">
+      <div class="pd-spinner"></div>
+      <span>Loading product…</span>
+    </div>
+  </div>
+
+  <footer data-footer></footer>
+
+  <script src="/MWAH _ Cannabis Vape Pens Designed for Her_files/nav.js"></script>
+  <script src="/MWAH _ Cannabis Vape Pens Designed for Her_files/footer.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="/assets/js/supabase-frontend.js"></script>
+  <script>
+  (function() {
+    const SUPABASE_URL  = 'https://rrpxvsmggmgeilbynuij.supabase.co';
+    const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJycHh2c21nZ21nZWlsYnludWlqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk5MzE0NDAsImV4cCI6MjEwNTUwNzQ0MH0.NLv7ylLgLN5xvW5FBiG66ChHCpdYGCpATTy5_Mqtfhw';
+
+    // Fallback products catalogue — always works even if Supabase is empty
+    const CATALOGUE = [
+      { slug:'strawberry-matcha', name:'Strawberry Matcha',  type:'HYBRID', price:44, vibe:'Sweet strawberry. Creamy, earthy, smooth.',     moods:'MWAHcha Era · Green Flag · Ceremonials',             video:'/assets/img/products/strawberry-matcha.mp4',  poster:'/assets/img/products/strawberry-matcha.png', description:'Strawberry Matcha brings together the sweetness of ripe strawberries with the earthy, ceremonial depth of matcha. A smooth, well-balanced hybrid perfect for creative afternoons and elevated moments.' },
+      { slug:'watermelon-wifey',  name:'Watermelon Wifey',   type:'INDICA', price:45, vibe:'Juicy watermelon. Sweet, crisp, refreshing.',   moods:'Wifey Material · Ring Worthy · That Girl',            video:'/assets/img/products/watermelon-wifey.mp4',   poster:'/assets/img/products/watermelon-wifey.png',  description:'Watermelon Wifey is your go-to for a blissful, relaxed evening. Deeply sweet and refreshing with that cool watermelon finish — everything an indica should be.' },
+      { slug:'its-giving-guava',  name:"It's Giving Guava",  type:'SATIVA', price:40, vibe:'Crisp guava. Tropical, light, lifted.',         moods:'Main character · Boss babe · Big aura',               video:'/assets/img/products/guava.mp4',              poster:'/assets/img/products/guava.png',              description:"It's Giving Guava is pure sativa energy. Tropical, crisp, and bubbly — this one was made for main characters. Think beach days, big decisions, and even bigger auras." },
+      { slug:'berry-baddie',      name:'Berry Baddie',        type:'SATIVA', price:38, vibe:'Bold berries. Sweet, tart, electric.',          moods:'Main character · Social butterfly · Hot girl energy',  video:'/assets/img/products/berry.mp4',              poster:'/assets/img/products/berry.png',              description:'Berry Baddie hits bold and electric. A sativa built for social energy — tart berries, a sweet finish, and enough lift to keep you talking and laughing all night.' },
+      { slug:'mango-mamacita',    name:'Mango Mamacita',      type:'HYBRID', price:42, vibe:'Sun-kissed mango. Bright, juicy, lit.',         moods:'Bombshell energy · Good vibes · Golden hour',         video:'/assets/img/products/mango.mp4',              poster:'/assets/img/products/mango.png',              description:'Mango Mamacita is golden-hour in a pen. A hybrid that hits bright and juicy then eases into a warm, glowing calm. Perfect for sunsets, good playlists, and even better company.' },
+      { slug:'peach-perfection',  name:'Peach Perfection',    type:'HYBRID', price:41, vibe:'Fresh peach. Smooth, balanced, polished.',      moods:'Slow sip · Soft girl era · Main character glow',      video:'/assets/img/products/peach.mp4',              poster:'/assets/img/products/peach.png',              description:'Peach Perfection is the balanced, polished choice. A hybrid that leans smooth and steady — fresh peach flavor, effortless draw, and a calm confidence that carries you through the day.' },
+      { slug:'she-ate-strawberry', name:'She Ate Strawberry', type:'INDICA', price:40, vibe:'Strawberry cream. Soft, sweet, indulgent.',     moods:"Zero f's · Pillow princess · Bed rot",                video:'/assets/img/products/strawberry.mp4',         poster:'/assets/img/products/strawberry.png',         description:'She Ate Strawberry is pure comfort. Soft and sweet with a creamy strawberry finish — this indica was made for nights in, fuzzy blankets, and absolutely zero obligations.' },
+      { slug:'glow-up-grape',     name:'Glow Up Grape',       type:'INDICA', price:40, vibe:'Concord grape. Plush, jammy, slow.',            moods:'Do not disturb · Beauty rest · Unbothered',           video:'/assets/img/products/grape.mp4',              poster:'/assets/img/products/grape.png',              description:'Glow Up Grape is your beauty-sleep essential. Plush, slow, and impossibly relaxing — like sinking into your best self. An indica that truly earns the "do not disturb."' },
+    ];
+
+    const params = new URLSearchParams(location.search);
+    const slug = params.get('slug');
+    const page = document.getElementById('pdPage');
+    const loading = document.getElementById('pdLoading');
+
+    if (!slug) { showNotFound(); return; }
+
+    async function init() {
+      let product = null;
+      let all = [...CATALOGUE];
+
+      try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/products?select=*&status=eq.active`, {
+          headers: { 'apikey': SUPABASE_ANON, 'Authorization': `Bearer ${SUPABASE_ANON}` }
+        });
+        const data = await res.json();
+        if (Array.isArray(data) && data.length > 0) {
+          // Merge DB data with fallback for media paths
+          all = CATALOGUE.map(fb => {
+            const db = data.find(d => d.slug === fb.slug) || {};
+            return {
+              ...fb,
+              price: parseFloat(db.price) > 0 ? db.price : fb.price,
+              name:  db.name || fb.name,
+              type:  db.type || fb.type,
+              description: db.description || fb.description,
+              moods: db.moods || fb.moods,
+              vibe:  db.vibe || fb.vibe,
+              poster: db.image_url || fb.poster,
+              video:  db.video_url || fb.video,
+            };
+          });
+        }
+      } catch(e) {}
+
+      product = all.find(p => p.slug === slug);
+      if (!product) { showNotFound(); return; }
+
+      // Update page title
+      document.title = `${product.name} | MWAH`;
+      document.querySelector('meta[name="description"]').content = product.vibe + ' — MWAH cannabis vape pens.';
+
+      // Related: same type, exclude current
+      const related = all.filter(p => p.slug !== slug && (p.type||'').toLowerCase() === (product.type||'').toLowerCase()).slice(0, 4);
+      // If fewer than 2 same-type, also pick from others
+      const extras = all.filter(p => p.slug !== slug && !related.find(r => r.slug === p.slug));
+      const relatedFinal = [...related, ...extras].slice(0, 4);
+
+      render(product, relatedFinal);
+    }
+
+    function chipClass(type) {
+      const t = (type||'').toLowerCase();
+      if (t === 'indica') return 'chip--indica';
+      if (t === 'sativa') return 'chip--sativa';
+      return 'chip--hybrid';
+    }
+
+    function render(p, related) {
+      const price = parseFloat(p.price) > 0 ? '$' + parseFloat(p.price).toFixed(2) : 'Price TBD';
+      const mediaEl = p.video
+        ? `<video class="pd-media__video" src="${p.video}" poster="${p.poster}" muted autoplay loop playsinline></video>`
+        : `<img class="pd-media__video" src="${p.poster}" alt="${p.name}" loading="eager">`;
+
+      const moodTags = (p.moods || '').split('·').map(m => m.trim()).filter(Boolean).map(m =>
+        `<span class="pd-moods__tag">${m}</span>`
+      ).join('');
+
+      const relatedHTML = related.length ? `
+        <div class="pd-related">
+          <h2 class="pd-related__title">You might also love</h2>
+          <div class="pd-related__grid">
+            ${related.map(r => {
+              const rMedia = r.video
+                ? `<video src="${r.video}" poster="${r.poster}" muted loop playsinline style="width:60%;height:140px;object-fit:contain;"></video>`
+                : `<img src="${r.poster}" alt="${r.name}" style="width:60%;height:140px;object-fit:contain;">`;
+              return `<a class="pd-rel-card" href="/product/?slug=${encodeURIComponent(r.slug)}">
+                <div class="pd-rel-card__media">${rMedia}</div>
+                <div class="pd-rel-card__body">
+                  <p class="pd-rel-card__type">${r.type||'HYBRID'}</p>
+                  <p class="pd-rel-card__name">${r.name}</p>
+                  <p class="pd-rel-card__price">${parseFloat(r.price)>0 ? '$'+parseFloat(r.price).toFixed(2) : 'Price TBD'}</p>
+                </div>
+              </a>`;
+            }).join('')}
+          </div>
+        </div>` : '';
+
+      loading.remove();
+      page.innerHTML = `
+        <section class="pd-hero" id="main-content">
+          <div class="pd-media">
+            ${mediaEl}
+            <span class="pd-media__chip ${chipClass(p.type)}">${p.type||'HYBRID'}</span>
+          </div>
+          <div class="pd-info">
+            <nav class="pd-breadcrumb">
+              <a href="/">Home</a> <span>›</span>
+              <a href="/products/">Products</a> <span>›</span>
+              <span>${p.name}</span>
+            </nav>
+            <p class="pd-eyebrow">${p.type||'HYBRID'}</p>
+            <h1 class="pd-name">${p.name}</h1>
+            <p class="pd-vibe">${p.vibe||''}</p>
+            ${moodTags ? `<div class="pd-moods">${moodTags}</div>` : ''}
+            <div class="pd-price-row">
+              <span class="pd-price">${price}</span>
+              <button class="pd-add-btn" id="pdAddBtn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+                ADD TO BAG
+              </button>
+            </div>
+            <div class="pd-specs">
+              <div class="pd-spec"><div class="pd-spec__label">Format</div><div class="pd-spec__value">1g All-in-One</div></div>
+              <div class="pd-spec"><div class="pd-spec__label">Strain</div><div class="pd-spec__value">${p.type||'Hybrid'}</div></div>
+              <div class="pd-spec"><div class="pd-spec__label">Heating</div><div class="pd-spec__value">Ceramic</div></div>
+              <div class="pd-spec"><div class="pd-spec__label">Activation</div><div class="pd-spec__value">Auto-Draw</div></div>
+              <div class="pd-spec"><div class="pd-spec__label">Charging</div><div class="pd-spec__value">USB-C</div></div>
+              <div class="pd-spec"><div class="pd-spec__label">Setup</div><div class="pd-spec__value">None needed</div></div>
+            </div>
+          </div>
+        </section>
+
+        <div class="pd-body">
+          <div class="pd-divider"></div>
+          <h2 class="page-h2">About This Flavor</h2>
+          <p class="page-p">${p.description || p.vibe || ''}</p>
+          <p class="page-p">Available only at licensed cannabis retailers. Check availability in your area before visiting.</p>
+          <div class="pd-divider"></div>
+        </div>
+
+        ${relatedHTML}
+      `;
+
+      // Wire up Add to Bag button
+      const btn = document.getElementById('pdAddBtn');
+      if (btn) {
+        btn.addEventListener('click', () => {
+          if (typeof window.mwahCart !== 'undefined') {
+            window.mwahCart.open();
+          }
+          // Use global addToCart via supabase-frontend
+          const item = { slug: p.slug, name: p.name, type: p.type||'', price: parseFloat(p.price)||0, image: p.poster||'' };
+          const stored = JSON.parse(localStorage.getItem('mwah_cart') || '[]');
+          const idx = stored.findIndex(i => i.slug === item.slug);
+          if (idx > -1) { stored[idx].qty = (stored[idx].qty||1) + 1; }
+          else { stored.push({ ...item, qty: 1 }); }
+          localStorage.setItem('mwah_cart', JSON.stringify(stored));
+
+          btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> ADDED!`;
+          btn.classList.add('added');
+          setTimeout(() => {
+            btn.classList.remove('added');
+            btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> ADD TO BAG`;
+          }, 1800);
+
+          // Refresh cart badge
+          const badge = document.querySelector('.mwah-cart-badge');
+          if (badge) {
+            const total = stored.reduce((a, i) => a + (i.qty||1), 0);
+            badge.textContent = total;
+            badge.classList.toggle('has-items', total > 0);
+          }
+
+          setTimeout(() => { if (typeof window.mwahCart !== 'undefined') window.mwahCart.open(); }, 300);
+        });
+      }
+
+      // Play related card videos on hover
+      page.querySelectorAll('.pd-rel-card video').forEach(v => {
+        const card = v.closest('.pd-rel-card');
+        card.addEventListener('mouseenter', () => v.play().catch(()=>{}));
+        card.addEventListener('mouseleave', () => { v.pause(); v.currentTime = 0; });
+      });
+    }
+
+    function showNotFound() {
+      loading && loading.remove();
+      page.innerHTML = `
+        <div class="pd-not-found">
+          <h1>Product not found</h1>
+          <p>We couldn't find the product you're looking for. Browse the full collection instead.</p>
+          <a href="/products/">View All Products</a>
+        </div>
+      `;
+    }
+
+    init();
+  })();
+  </script>
+</body>
+</html>
