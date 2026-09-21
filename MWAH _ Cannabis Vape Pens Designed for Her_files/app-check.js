@@ -43,7 +43,7 @@ var firebaseConfig = {
 
 // Site key for reCAPTCHA v3 — registered against the gimmemwah-consumer GCP
 // project (matching the Firebase project that validates App Check tokens).
-// Allowed domains on the key: gimmemwah.com, gimmemwah-website.web.app,
+// Allowed domains on the key: gimmeemwah.com, gimmemwah-website.web.app,
 // localhost. If you add a new host (e.g. a custom preview domain), update
 // the key's allowed-domains list in the reCAPTCHA admin console.
 var RECAPTCHA_SITE_KEY = "6LfaNsosAAAAAI0C5Bag6Fv8nr26QbQitxATk_-J";

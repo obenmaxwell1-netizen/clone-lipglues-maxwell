@@ -36,8 +36,8 @@
   };
 
   function edgeEndpoint() {
-    if (window.location.hostname === "gimmemwah.com" ||
-        window.location.hostname === "www.gimmemwah.com") {
+    if (window.location.hostname === "gimmeemwah.com" ||
+        window.location.hostname === "www.gimmeemwah.com") {
       return window.location.origin + "/api/signup";
     }
     return DIRECT_ENDPOINT;

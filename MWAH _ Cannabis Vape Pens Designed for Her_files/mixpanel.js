@@ -1,5 +1,5 @@
 /* =========================================================================
-   mixpanel.js - Privacy-minimized Mixpanel sender for gimmemwah.com.
+   mixpanel.js - Privacy-minimized Mixpanel sender for gimmeemwah.com.
 
    This is intentionally a small direct sender rather than the Mixpanel
    browser SDK. It has no autocapture, session replay, heatmaps, identify(),
@@ -23,7 +23,7 @@
   var SESSION_STARTED_KEY = "mwah_mixpanel_session_started";
   var DEFAULT_CONFIG = {
     enabled: true,
-    productionHost: "gimmemwah.com",
+    productionHost: "gimmeemwah.com",
     productionToken: "4f4c26bbe771809ab092cb26dddaf1d6",
     qaToken: "128fe91ec644461e714adc29b2e96573",
     qaHosts: [
@@ -244,7 +244,7 @@
     var settings = config();
     var currentHost = host();
     if (settings.enabled !== true || isLocalHost(currentHost)) return null;
-    if (currentHost === String(settings.productionHost || "gimmemwah.com").toLowerCase()) {
+    if (currentHost === String(settings.productionHost || "gimmeemwah.com").toLowerCase()) {
       return settings.productionToken
         ? { token: settings.productionToken, environment: "production" }
         : null;
