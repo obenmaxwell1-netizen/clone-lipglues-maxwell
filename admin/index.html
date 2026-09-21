@@ -52,6 +52,10 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
         Store Requests
       </button>
+      <button class="nav-item" data-section="orders" id="nav-orders">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        Orders
+      </button>
     </nav>
 
     <div class="sidebar__footer">
@@ -254,6 +258,38 @@
           <table class="data-table">
             <thead><tr><th>Store Name</th><th>City</th><th>State</th><th>Submitted</th></tr></thead>
             <tbody id="requestsTableBody"><tr><td colspan="4" class="loading-cell">Loading…</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── SECTION: ORDERS ─────────────────────────────────── -->
+    <section class="section" id="section-orders">
+      <div class="section-header">
+        <div>
+          <h1 class="section-title">Orders</h1>
+          <p class="section-sub">Customer orders placed through the website.</p>
+        </div>
+        <button class="btn btn-outline" id="exportOrdersBtn">Export CSV</button>
+      </div>
+      <div class="card table-card">
+        <div class="table-wrap">
+          <table class="data-table" id="ordersTable">
+            <thead>
+              <tr>
+                <th>Order #</th>
+                <th>Customer</th>
+                <th>Email</th>
+                <th>Location</th>
+                <th>Items</th>
+                <th>Total</th>
+                <th>Payment</th>
+                <th>Status</th>
+                <th>Date</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="ordersTableBody"><tr><td colspan="10" class="loading-cell">Loading orders…</td></tr></tbody>
           </table>
         </div>
       </div>

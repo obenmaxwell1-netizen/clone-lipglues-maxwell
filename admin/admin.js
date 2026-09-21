@@ -36,6 +36,7 @@ const sectionTitles = {
   cms:         'Homepage CMS',
   subscribers: 'Subscribers',
   requests:    'Store Requests',
+  orders:      'Orders',
 };
 
 function setupNav() {
@@ -132,6 +133,7 @@ const loaders = {
   cms:         loadCMS,
   subscribers: loadSubscribers,
   requests:    loadRequests,
+  orders:      loadOrders,
 };
 
 // ── OVERVIEW ────────────────────────────────────────────────────────
@@ -526,6 +528,121 @@ async function loadRequests() {
       <td style="color:var(--muted)">${fmtDate(r.created_at)}</td>
     </tr>`).join('') : '<tr><td colspan="4" class="loading-cell">No requests yet.</td></tr>';
 }
+
+// ── ORDERS ─────────────────────────────────────────────
+const PAYMENT_LABELS = {
+  chime: 'Chime', bank_transfer: 'Bank Transfer', wise: 'Wise',
+  crypto: 'Crypto', zelle: 'Zelle', google_pay: 'Google Pay', apple_pay: 'Apple Pay',
+};
+const STATUS_COLORS = {
+  pending: 'orange', processing: 'hybrid', shipped: 'sativa', delivered: 'active', cancelled: 'inactive',
+};
+
+async function loadOrders() {
+  const tbody = document.getElementById('ordersTableBody');
+  tbody.innerHTML = '<tr><td colspan="10" class="loading-cell">Loading orders…</td></tr>';
+  const { data, error } = await client.from('orders').select('*').order('created_at', { ascending: false });
+  if (error) { tbody.innerHTML = `<tr><td colspan="10" class="loading-cell">${error.message}</td></tr>`; return; }
+
+  if (!data.length) {
+    tbody.innerHTML = '<tr><td colspan="10" class="loading-cell">No orders yet. Orders from the website will appear here.</td></tr>';
+  } else {
+    tbody.innerHTML = data.map(o => {
+      const items = Array.isArray(o.items) ? o.items : [];
+      const itemSummary = items.map(i => `${i.name} ×${i.qty||1}`).join(', ');
+      const statusCls = STATUS_COLORS[o.status] || 'active';
+      const pmLabel = PAYMENT_LABELS[o.payment_method] || o.payment_method || '—';
+      return `<tr>
+        <td style="font-weight:800;color:var(--pink);font-size:.8rem">${escHtml(o.order_number||'—')}</td>
+        <td>
+          <div style="font-weight:600">${escHtml(o.full_name)}</div>
+          <div style="font-size:.75rem;color:var(--muted)">${escHtml(o.phone||'')}</div>
+        </td>
+        <td style="font-size:.82rem">${escHtml(o.email)}</td>
+        <td style="font-size:.8rem;color:var(--muted)">${escHtml([o.city,o.country].filter(Boolean).join(', '))}</td>
+        <td style="font-size:.78rem;color:var(--muted);max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${escHtml(itemSummary)}">${escHtml(itemSummary||'—')}</td>
+        <td style="font-weight:800;color:var(--pink)">$${parseFloat(o.subtotal||0).toFixed(2)}</td>
+        <td><span class="badge badge--active" style="font-size:.7rem">${escHtml(pmLabel)}</span></td>
+        <td>
+          <select class="order-status-sel" onchange="updateOrderStatus('${o.id}', this.value)" style="background:var(--surface2);border:1px solid rgba(255,255,255,.12);border-radius:8px;color:#fff;font-family:inherit;font-size:.75rem;padding:4px 8px;cursor:pointer">
+            ${['pending','processing','shipped','delivered','cancelled'].map(s =>
+              `<option value="${s}" ${o.status===s?'selected':''}>${s.charAt(0).toUpperCase()+s.slice(1)}</option>`
+            ).join('')}
+          </select>
+        </td>
+        <td style="color:var(--muted);font-size:.8rem">${fmtDate(o.created_at)}</td>
+        <td>
+          <button class="btn btn-outline btn-icon" onclick="viewOrder('${o.id}')">View</button>
+        </td>
+      </tr>`;
+    }).join('');
+  }
+
+  // Export CSV
+  document.getElementById('exportOrdersBtn').onclick = () => {
+    if (!data.length) return;
+    const rows = data.map(o => [
+      o.order_number, o.full_name, o.email, o.phone, o.gender,
+      o.country, o.city, o.address, o.subtotal, o.payment_method, o.status, fmtDate(o.created_at),
+      (Array.isArray(o.items) ? o.items.map(i => i.name+'x'+i.qty).join(' | ') : ''),
+      o.notes || ''
+    ].map(v => `"${String(v||'').replace(/"/g,'""')}"`).join(','));
+    const csv = 'Order#,Name,Email,Phone,Gender,Country,City,Address,Total,Payment,Status,Date,Items,Notes\n' + rows.join('\n');
+    const a = document.createElement('a');
+    a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+    a.download = 'mwah-orders.csv';
+    a.click();
+  };
+}
+
+window.updateOrderStatus = async (id, status) => {
+  const { error } = await client.from('orders').update({ status, updated_at: new Date().toISOString() }).eq('id', id);
+  if (error) { toast('Error updating status: ' + error.message, 'error'); return; }
+  toast('Order status updated!');
+};
+
+window.viewOrder = async (id) => {
+  const { data: o, error } = await client.from('orders').select('*').eq('id', id).single();
+  if (error || !o) { toast('Could not load order.', 'error'); return; }
+  const items = Array.isArray(o.items) ? o.items : [];
+  const pmLabel = PAYMENT_LABELS[o.payment_method] || o.payment_method || '—';
+  const html = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
+      <div class="form-group" style="gap:4px"><label>Order #</label><div style="font-weight:800;color:#e75480">${escHtml(o.order_number||'')}</div></div>
+      <div class="form-group" style="gap:4px"><label>Status</label><div style="font-weight:700;text-transform:capitalize">${escHtml(o.status)}</div></div>
+      <div class="form-group" style="gap:4px"><label>Full Name</label><div style="font-weight:600">${escHtml(o.full_name)}</div></div>
+      <div class="form-group" style="gap:4px"><label>Gender</label><div>${escHtml(o.gender||'—')}</div></div>
+      <div class="form-group" style="gap:4px"><label>Email</label><div>${escHtml(o.email)}</div></div>
+      <div class="form-group" style="gap:4px"><label>Phone</label><div>${escHtml(o.phone)}</div></div>
+      <div class="form-group" style="gap:4px"><label>Country</label><div>${escHtml(o.country)}</div></div>
+      <div class="form-group" style="gap:4px"><label>City</label><div>${escHtml(o.city)}</div></div>
+      <div class="form-group" style="gap:4px;grid-column:1/-1"><label>Full Address</label><div>${escHtml(o.address||'—')}</div></div>
+      <div class="form-group" style="gap:4px"><label>Payment Method</label><div style="font-weight:700">${escHtml(pmLabel)}</div></div>
+      <div class="form-group" style="gap:4px"><label>Order Total</label><div style="font-weight:800;color:#e75480;font-size:1.1rem">$${parseFloat(o.subtotal||0).toFixed(2)}</div></div>
+    </div>
+    <label style="font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#e75480">Items Ordered</label>
+    <div style="margin-top:8px;border:1px solid rgba(255,255,255,.1);border-radius:10px;overflow:hidden">
+      ${items.map(i => `<div style="display:flex;justify-content:space-between;padding:10px 14px;border-bottom:1px solid rgba(255,255,255,.06);font-size:.85rem"><span>${escHtml(i.name)} <span style="color:#888">×${i.qty||1}</span></span><span style="font-weight:700">$${((parseFloat(i.price)||0)*(i.qty||1)).toFixed(2)}</span></div>`).join('')}
+      <div style="display:flex;justify-content:space-between;padding:10px 14px;font-weight:800;font-size:.9rem;color:#e75480"><span>Total</span><span>$${parseFloat(o.subtotal||0).toFixed(2)}</span></div>
+    </div>
+    ${o.notes ? `<div style="margin-top:12px"><label style="font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#888">Customer Notes</label><p style="margin-top:4px;font-size:.85rem;color:#ccc">${escHtml(o.notes)}</p></div>` : ''}
+    <div style="margin-top:12px">
+      <label style="font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#888">Update Status</label>
+      <select id="modal_status" style="margin-top:6px;width:100%;background:var(--surface2);border:1px solid rgba(255,255,255,.15);border-radius:10px;color:#fff;font-family:inherit;font-size:.9rem;padding:10px 14px">
+        ${['pending','processing','shipped','delivered','cancelled'].map(s =>
+          `<option value="${s}" ${o.status===s?'selected':''}>${s.charAt(0).toUpperCase()+s.slice(1)}</option>`
+        ).join('')}
+      </select>
+    </div>`;
+  openModal(`Order: ${o.order_number||'Detail'}`, html, async () => {
+    const newStatus = document.getElementById('modal_status').value;
+    const { error } = await client.from('orders').update({ status: newStatus, updated_at: new Date().toISOString() }).eq('id', o.id);
+    if (error) { toast('Error: ' + error.message, 'error'); return; }
+    toast('Order status updated!');
+    closeModal();
+    loadOrders();
+  }, 'Update Status');
+};
 
 // ── SECURITY: Escape HTML ─────────────────────────────────────────────
 function escHtml(str) {

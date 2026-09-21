@@ -1,0 +1,371 @@
+/* =========================================================
+   MWAH Checkout Modal — checkout.css
+   Multi-step checkout: Info → Payment → Confirm
+   ========================================================= */
+
+/* ── Overlay ──────────────────────────────────────────────── */
+.mwah-checkout-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.7);
+  z-index: 9100;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .3s;
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+.mwah-checkout-overlay.open {
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* ── Modal box ────────────────────────────────────────────── */
+.mwah-checkout-modal {
+  background: #111;
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 20px;
+  width: 100%;
+  max-width: 560px;
+  max-height: 90dvh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  transform: translateY(32px) scale(.97);
+  transition: transform .35s cubic-bezier(.4,0,.2,1);
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,.15) transparent;
+}
+.mwah-checkout-modal::-webkit-scrollbar { width: 4px; }
+.mwah-checkout-modal::-webkit-scrollbar-thumb { background: rgba(255,255,255,.15); border-radius: 2px; }
+.mwah-checkout-overlay.open .mwah-checkout-modal {
+  transform: translateY(0) scale(1);
+}
+
+/* ── Modal header ─────────────────────────────────────────── */
+.mwah-checkout-modal__head {
+  position: sticky;
+  top: 0;
+  background: #111;
+  z-index: 2;
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.mwah-checkout-modal__title {
+  font-size: .95rem;
+  font-weight: 800;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: #fff;
+}
+.mwah-checkout-modal__close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #aaa;
+  display: flex;
+  padding: 4px;
+  border-radius: 50%;
+  transition: color .15s, background .15s;
+}
+.mwah-checkout-modal__close:hover { color: #fff; background: rgba(255,255,255,.1); }
+
+/* ── Step indicator ───────────────────────────────────────── */
+.mwah-checkout-steps {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding: 16px 24px;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+}
+.mwah-checkout-step {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+}
+.mwah-checkout-step__num {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: .75rem;
+  font-weight: 800;
+  border: 2px solid rgba(255,255,255,.2);
+  color: #888;
+  flex-shrink: 0;
+  transition: all .3s;
+}
+.mwah-checkout-step__label {
+  font-size: .72rem;
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: #666;
+  transition: color .3s;
+}
+.mwah-checkout-step.active .mwah-checkout-step__num {
+  background: #e75480;
+  border-color: #e75480;
+  color: #fff;
+}
+.mwah-checkout-step.active .mwah-checkout-step__label { color: #fff; }
+.mwah-checkout-step.done .mwah-checkout-step__num {
+  background: #1a8a4a;
+  border-color: #1a8a4a;
+  color: #fff;
+}
+.mwah-checkout-step.done .mwah-checkout-step__label { color: #4ade80; }
+.mwah-checkout-step-divider {
+  height: 2px;
+  flex: 0 0 24px;
+  background: rgba(255,255,255,.1);
+  margin: 0 4px;
+}
+
+/* ── Min order warning ────────────────────────────────────── */
+.mwah-checkout-min-warn {
+  margin: 20px 24px;
+  padding: 16px 20px;
+  background: rgba(231,84,128,.12);
+  border: 1px solid rgba(231,84,128,.3);
+  border-radius: 12px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+.mwah-checkout-min-warn svg { flex-shrink: 0; color: #e75480; margin-top: 1px; }
+.mwah-checkout-min-warn p { font-size: .85rem; line-height: 1.5; color: #f4f4f4; }
+.mwah-checkout-min-warn strong { color: #e75480; }
+
+/* ── Body (form area) ─────────────────────────────────────── */
+.mwah-checkout-body {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ── Form elements ────────────────────────────────────────── */
+.mwah-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.mwah-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.mwah-form-group label {
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: #aaa;
+}
+.mwah-form-group input,
+.mwah-form-group select {
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 10px;
+  padding: 12px 14px;
+  color: #f4f4f4;
+  font-family: inherit;
+  font-size: .9rem;
+  outline: none;
+  transition: border-color .2s, background .2s;
+  width: 100%;
+}
+.mwah-form-group input::placeholder { color: #555; }
+.mwah-form-group input:focus,
+.mwah-form-group select:focus {
+  border-color: #e75480;
+  background: rgba(231,84,128,.06);
+}
+.mwah-form-group select option { background: #1a1a1a; color: #f4f4f4; }
+.mwah-form-group input.error { border-color: #ff6b6b !important; }
+
+/* ── Section label ────────────────────────────────────────── */
+.mwah-form-section-label {
+  font-size: .7rem;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: #e75480;
+  padding-bottom: 4px;
+  border-bottom: 1px solid rgba(231,84,128,.2);
+}
+
+/* ── Payment cards ────────────────────────────────────────── */
+.mwah-payment-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+@media (max-width: 480px) {
+  .mwah-payment-grid { grid-template-columns: repeat(2, 1fr); }
+  .mwah-form-row { grid-template-columns: 1fr; }
+}
+.mwah-payment-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 10px;
+  background: rgba(255,255,255,.05);
+  border: 2px solid rgba(255,255,255,.08);
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all .2s;
+  text-align: center;
+}
+.mwah-payment-card:hover {
+  background: rgba(255,255,255,.09);
+  border-color: rgba(255,255,255,.2);
+  transform: translateY(-2px);
+}
+.mwah-payment-card.selected {
+  border-color: #e75480;
+  background: rgba(231,84,128,.1);
+  box-shadow: 0 0 0 1px #e75480;
+}
+.mwah-payment-card__icon {
+  font-size: 1.6rem;
+  line-height: 1;
+}
+.mwah-payment-card__name {
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+  color: #ddd;
+}
+
+/* ── Order summary in confirm step ───────────────────────── */
+.mwah-order-summary {
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.mwah-order-summary-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  font-size: .85rem;
+  border-bottom: 1px solid rgba(255,255,255,.05);
+}
+.mwah-order-summary-row:last-child { border-bottom: none; }
+.mwah-order-summary-row__label { color: #aaa; }
+.mwah-order-summary-row__val { font-weight: 700; color: #fff; }
+.mwah-order-summary-row.total { background: rgba(231,84,128,.08); }
+.mwah-order-summary-row.total .mwah-order-summary-row__val { color: #e75480; font-size: 1rem; }
+
+.mwah-confirm-info {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.mwah-confirm-item {
+  background: rgba(255,255,255,.04);
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+.mwah-confirm-item__label { font-size: .68rem; color: #888; text-transform: uppercase; letter-spacing: .06em; font-weight: 600; }
+.mwah-confirm-item__val { font-size: .85rem; color: #f4f4f4; font-weight: 600; margin-top: 2px; }
+
+/* ── Payment method display ───────────────────────────────── */
+.mwah-payment-chosen {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: rgba(231,84,128,.08);
+  border: 1px solid rgba(231,84,128,.25);
+  border-radius: 12px;
+}
+.mwah-payment-chosen__icon { font-size: 1.4rem; }
+.mwah-payment-chosen__label { font-size: .9rem; font-weight: 700; color: #fff; }
+.mwah-payment-chosen__sub { font-size: .75rem; color: #aaa; margin-top: 1px; }
+
+/* ── Success screen ───────────────────────────────────────── */
+.mwah-checkout-success {
+  padding: 48px 24px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+.mwah-checkout-success__icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1a8a4a, #22c55e);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  animation: successPop .5s cubic-bezier(.68,-.55,.27,1.55);
+}
+@keyframes successPop {
+  0%   { transform: scale(0); }
+  100% { transform: scale(1); }
+}
+.mwah-checkout-success__title { font-size: 1.3rem; font-weight: 800; color: #fff; }
+.mwah-checkout-success__sub { font-size: .9rem; color: #aaa; line-height: 1.6; max-width: 340px; }
+.mwah-checkout-success__order { font-size: 1rem; font-weight: 800; color: #e75480; letter-spacing: .08em; }
+
+/* ── Footer with nav buttons ──────────────────────────────── */
+.mwah-checkout-footer {
+  position: sticky;
+  bottom: 0;
+  background: #111;
+  border-top: 1px solid rgba(255,255,255,.08);
+  padding: 16px 24px;
+  display: flex;
+  gap: 12px;
+}
+.mwah-checkout-btn-back {
+  flex: 0 0 auto;
+  padding: 14px 20px;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: 50px;
+  color: #aaa;
+  font-family: inherit;
+  font-size: .8rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all .2s;
+}
+.mwah-checkout-btn-back:hover { color: #fff; border-color: rgba(255,255,255,.35); }
+.mwah-checkout-btn-next {
+  flex: 1;
+  padding: 14px;
+  background: linear-gradient(135deg, #e75480 0%, #c73b68 100%);
+  border: none;
+  border-radius: 50px;
+  color: #fff;
+  font-family: inherit;
+  font-size: .85rem;
+  font-weight: 800;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: opacity .2s, transform .15s;
+}
+.mwah-checkout-btn-next:hover { opacity: .9; transform: translateY(-1px); }
+.mwah-checkout-btn-next:active { transform: translateY(0); }
+.mwah-checkout-btn-next:disabled { opacity: .5; cursor: not-allowed; transform: none; }
