@@ -345,7 +345,8 @@
           const fixUrl = u => (!u ? '' : (u.startsWith('/') || u.startsWith('http') ? u : '/' + u));
           allProducts = data.map(p => ({
             ...p,
-            poster: fixUrl(p.image_url) || FALLBACK.find(f => f.slug === p.slug)?.poster || '',
+            // Always prefer local image path — DB image_url may be a broken relative path
+            poster: FALLBACK.find(f => f.slug === p.slug)?.poster || fixUrl(p.image_url) || '',
             vibe:   p.description || FALLBACK.find(f => f.slug === p.slug)?.vibe   || '',
             moods:  p.moods       || FALLBACK.find(f => f.slug === p.slug)?.moods  || '',
           }));

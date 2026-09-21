@@ -352,7 +352,7 @@
         });
         const data = await res.json();
         if (Array.isArray(data) && data.length > 0) {
-          // Merge DB data — always normalise image URL to absolute path
+          // Merge DB data — always use local image paths (DB image_url may be malformed)
           const fixUrl = u => (!u ? '' : (u.startsWith('/') || u.startsWith('http') ? u : '/' + u));
           all = CATALOGUE.map(fb => {
             const db = data.find(d => d.slug === fb.slug) || {};
@@ -364,7 +364,8 @@
               description: db.description || fb.description,
               moods: db.moods || fb.moods,
               vibe:  db.vibe || fb.vibe,
-              poster: fixUrl(db.image_url) || fb.poster,
+              // Always prefer local image path — DB image_url may be a broken relative path
+              poster: fb.poster || fixUrl(db.image_url),
             };
           });
         }
