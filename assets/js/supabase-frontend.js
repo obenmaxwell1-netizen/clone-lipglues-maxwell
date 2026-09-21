@@ -561,53 +561,61 @@
           slug: dbSlug,
           name: card.querySelector('.op-card__title')?.textContent || 'MWAH Vape',
           type: card.querySelector('.op-card__eyebrow')?.textContent || 'HYBRID',
-          price: 35.00 // Default fallback price if not in database
+          price: 35.00
         };
 
+        // Target the shell (the card image box) — inject overlay inside it
+        const shellEl = card.querySelector('.op-card__shell');
+        if (!shellEl) return;
+
+        // Also remove old VIEW DETAILS link from info section
         const infoEl = card.querySelector('.op-card__info');
-        if (!infoEl) return;
+        if (infoEl) {
+          const detailLink = infoEl.querySelector('.op-card__detail');
+          if (detailLink) detailLink.remove();
+        }
 
-        if (card.querySelector('.op-card__price-row')) return;
-        
-        const detailLink = infoEl.querySelector('.op-card__detail');
-        if (detailLink) detailLink.remove();
+        // Don't double-inject
+        if (shellEl.querySelector('.op-card__buy-overlay')) return;
 
-        const row = document.createElement('div');
-        row.className = 'op-card__price-row';
+        // Build overlay bar at bottom of the card image box
+        const overlay = document.createElement('div');
+        overlay.className = 'op-card__buy-overlay';
 
         const priceEl = document.createElement('span');
+        priceEl.className = 'op-card__buy-price';
         if (product.price && parseFloat(product.price) > 0) {
           priceEl.textContent = '$' + parseFloat(product.price).toFixed(2);
         } else {
           priceEl.textContent = 'Price TBD';
-          priceEl.style.color = '#888';
         }
-        row.appendChild(priceEl);
+        overlay.appendChild(priceEl);
 
         const btn = document.createElement('button');
         btn.className = 'op-card__add-to-cart';
         btn.setAttribute('data-cart-product', dbSlug);
-        btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> ADD TO BAG`;
-        
+        btn.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> ADD TO BAG`;
+
         btn.onclick = function(e) {
           e.stopPropagation();
           const videoEl = card.querySelector('.op-card__video');
           const imgSrc  = videoEl ? (videoEl.getAttribute('poster') || videoEl.getAttribute('data-poster') || '') : '';
           addToCart({ slug: dbSlug, name: product.name, type: product.type||'', price: parseFloat(product.price)||0, image: imgSrc });
-          
-          btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> ADDED!`;
+
+          btn.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> ADDED!`;
           btn.classList.add('added');
           setTimeout(() => {
             btn.classList.remove('added');
-            btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> ADD TO BAG`;
+            btn.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> ADD TO BAG`;
           }, 1500);
           const trigger = document.getElementById('mwahCartTrigger');
           if (trigger) { trigger.classList.remove('pulse'); void trigger.offsetWidth; trigger.classList.add('pulse'); }
           setTimeout(openCart, 400);
           trackEvent('add_to_cart', dbSlug);
         };
-        row.appendChild(btn);
-        infoEl.appendChild(row);
+
+        overlay.appendChild(btn);
+        shellEl.appendChild(overlay);
     });
   }
 

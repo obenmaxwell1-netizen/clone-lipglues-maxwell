@@ -41,6 +41,45 @@
 }
 
 /* ── Product Card Additions ───────────────────────────────── */
+
+/* Buy overlay — sits inside .op-card__shell at the bottom */
+.op-card__buy-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-top: 1px solid rgba(0,0,0,0.07);
+  z-index: 10;
+  gap: 8px;
+  transition: opacity .25s;
+}
+
+/* On non-focal (dimmed) cards, dim the overlay too */
+.op-card:not(.is-focal) .op-card__buy-overlay {
+  opacity: 0;
+  pointer-events: none;
+}
+.op-card.is-focal .op-card__buy-overlay {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.op-card__buy-price {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #e75480;
+  flex-shrink: 0;
+  letter-spacing: .02em;
+}
+
+/* Legacy price class kept for compatibility */
 .op-card__price {
   font-size: 1.05rem;
   font-weight: 700;
