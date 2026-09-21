@@ -105,8 +105,11 @@
             '</svg>',
           '</button>',
         '</div>',
-        '<div class="op-nav__drawer-links">', centerLinksHTML, '</div>',
-        '<div class="op-nav__drawer-social">', drawerSocialsHTML, '</div>',
+        '<div class="op-nav__drawer-links">', 
+          centerLinksHTML, 
+          '<button type="button" class="op-nav__link" id="contactUsToggle" style="background: none; border: none; padding: 0; font: inherit; color: inherit; cursor: pointer; text-align: left; width: 100%;">CONTACT US</button>',
+        '</div>',
+        '<div class="op-nav__drawer-social" id="contactUsSocials" style="display: none; padding-top: 15px; flex-wrap: wrap;">', drawerSocialsHTML, '</div>',
       '</div>',
     ].join("");
 
@@ -140,6 +143,19 @@
           else entry.el.setAttribute("aria-hidden", entry.ariaHidden);
         });
         drawerInertTargets = [];
+      }
+
+      var contactToggle = drawer.querySelector("#contactUsToggle");
+      var contactSocials = drawer.querySelector("#contactUsSocials");
+      if (contactToggle && contactSocials) {
+        contactToggle.addEventListener("click", function(e) {
+          e.preventDefault();
+          if (contactSocials.style.display === "none") {
+            contactSocials.style.display = "flex";
+          } else {
+            contactSocials.style.display = "none";
+          }
+        });
       }
 
       function openDrawer() {
