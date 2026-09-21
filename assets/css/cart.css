@@ -50,24 +50,44 @@
 }
 .op-card__price.hidden { display: none; }
 
+/* Price + Add to Bag row injected by JS */
+.op-card__price-row {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  width: 100%;
+  padding-top: 12px;
+  margin-top: 8px;
+  border-top: 1px solid rgba(0,0,0,0.07);
+  gap: 12px;
+}
+
+.op-card__price-row span {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #e75480;
+  flex-shrink: 0;
+}
+
 .op-card__add-to-cart {
-  display: inline-flex;
+  display: inline-flex !important;
   align-items: center;
-  gap: 8px;
-  padding: 10px 20px;
+  gap: 6px;
+  padding: 10px 18px;
   background: #e75480;
-  color: #fff;
+  color: #fff !important;
   border: none;
   border-radius: 50px;
   font-family: inherit;
-  font-size: .8rem;
+  font-size: .78rem;
   font-weight: 700;
-  letter-spacing: .08em;
+  letter-spacing: .06em;
   text-transform: uppercase;
   cursor: pointer;
   transition: background .2s, transform .15s, box-shadow .2s;
-  margin-top: 8px;
   white-space: nowrap;
+  flex-shrink: 0;
+  text-decoration: none;
 }
 .op-card__add-to-cart:hover {
   background: #c73b68;

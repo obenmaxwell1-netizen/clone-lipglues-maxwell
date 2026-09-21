@@ -574,16 +574,8 @@
 
         const row = document.createElement('div');
         row.className = 'op-card__price-row';
-        row.style.display = 'flex';
-        row.style.justifyContent = 'space-between';
-        row.style.alignItems = 'center';
-        row.style.marginTop = 'auto';
-        row.style.paddingTop = '16px';
 
         const priceEl = document.createElement('span');
-        priceEl.style.fontSize = '1.1rem';
-        priceEl.style.fontWeight = '800';
-        priceEl.style.color = 'var(--pink)';
         if (product.price && parseFloat(product.price) > 0) {
           priceEl.textContent = '$' + parseFloat(product.price).toFixed(2);
         } else {
@@ -595,15 +587,7 @@
         const btn = document.createElement('button');
         btn.className = 'op-card__add-to-cart';
         btn.setAttribute('data-cart-product', dbSlug);
-        btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> ADD TO BAG`;
-        btn.style.background = 'var(--pink)';
-        btn.style.color = '#fff';
-        btn.style.border = 'none';
-        btn.style.padding = '8px 16px';
-        btn.style.borderRadius = '50px';
-        btn.style.fontWeight = '700';
-        btn.style.fontSize = '0.75rem';
-        btn.style.cursor = 'pointer';
+        btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> ADD TO BAG`;
         
         btn.onclick = function(e) {
           e.stopPropagation();
@@ -611,11 +595,11 @@
           const imgSrc  = videoEl ? (videoEl.getAttribute('poster') || videoEl.getAttribute('data-poster') || '') : '';
           addToCart({ slug: dbSlug, name: product.name, type: product.type||'', price: parseFloat(product.price)||0, image: imgSrc });
           
-          btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px"><polyline points="20 6 9 17 4 12"/></svg> ADDED!`;
-          btn.style.background = '#28a745';
+          btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> ADDED!`;
+          btn.classList.add('added');
           setTimeout(() => {
-            btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> ADD TO BAG`;
-            btn.style.background = 'var(--pink)';
+            btn.classList.remove('added');
+            btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> ADD TO BAG`;
           }, 1500);
           const trigger = document.getElementById('mwahCartTrigger');
           if (trigger) { trigger.classList.remove('pulse'); void trigger.offsetWidth; trigger.classList.add('pulse'); }
