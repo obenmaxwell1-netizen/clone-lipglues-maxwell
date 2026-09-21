@@ -544,16 +544,26 @@
   // PRICING
   // ════════════════════════════════════════════════════════
   async function initPricing() {
+    let priceMap = {};
     try {
       const products = await sbFetch('/rest/v1/products?select=slug,name,price,type&status=eq.active');
-      if (!products || !products.length) return;
-      const priceMap = {};
-      products.forEach(p => { priceMap[p.slug] = p; });
+      if (products && products.length) {
+        products.forEach(p => { priceMap[p.slug] = p; });
+      }
+    } catch (err) {
+      console.warn('[MWAH] Pricing fetch failed, using fallbacks:', err.message);
+    }
 
-      document.querySelectorAll('.op-card[data-product]').forEach(card => {
-        const dbSlug = SLUG_MAP[card.dataset.product];
-        const product = priceMap[dbSlug];
-        if (!product) return;
+    document.querySelectorAll('.op-card[data-product]').forEach(card => {
+        const rawSlug = card.dataset.product;
+        const dbSlug = SLUG_MAP[rawSlug] || rawSlug;
+        const product = priceMap[dbSlug] || {
+          slug: dbSlug,
+          name: card.querySelector('.op-card__title')?.textContent || 'MWAH Vape',
+          type: card.querySelector('.op-card__eyebrow')?.textContent || 'HYBRID',
+          price: 35.00 // Default fallback price if not in database
+        };
+
         const infoEl = card.querySelector('.op-card__info');
         if (!infoEl) return;
 
@@ -614,10 +624,7 @@
         };
         row.appendChild(btn);
         infoEl.appendChild(row);
-      });
-    } catch (err) {
-      console.warn('[MWAH] Pricing fetch failed:', err.message);
-    }
+    });
   }
 
   // ════════════════════════════════════════════════════════
