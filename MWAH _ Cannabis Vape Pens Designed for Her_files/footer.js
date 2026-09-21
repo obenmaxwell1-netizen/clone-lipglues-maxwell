@@ -63,7 +63,7 @@
             '<p class="op-footer__col-title">FOLLOW</p>',
             '<a href="https://www.tiktok.com/@gimmeemwahh?_r=1&_t=ZP-99u1fW9hVRX" class="op-footer__link" aria-label="TikTok (opens in new tab)" target="_blank" rel="noopener noreferrer" data-analytics-platform="tiktok" data-analytics-location="footer">TIKTOK</a>',
             '<a href="https://t.me/gimmemwhah" class="op-footer__link" aria-label="Telegram (opens in new tab)" target="_blank" rel="noopener noreferrer" data-analytics-platform="telegram" data-analytics-location="footer">TELEGRAM</a>',
-            '<a href="https://wa.me/9406227259" class="op-footer__link" aria-label="WhatsApp (opens in new tab)" target="_blank" rel="noopener noreferrer" data-analytics-platform="whatsapp" data-analytics-location="footer">WHATSAPP</a>',
+            '<a href="tel:+9406227259" class="op-footer__link" aria-label="Call Us" data-analytics-platform="phone" data-analytics-location="footer">CALL US</a>',
           '</div>',
         '</div>',
         '<div class="op-footer__lcb">',
