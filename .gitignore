@@ -8,4 +8,6 @@ fix2-images.js
 fix3-bypass.js
 fix4-posters.js
 .env
+.env.local
+.env.*.local
 .DS_Store

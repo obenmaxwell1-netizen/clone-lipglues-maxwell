@@ -478,7 +478,21 @@
       };
 
       const [result] = await sbPost('/rest/v1/orders', payload);
-      const orderNum = result?.order_number || 'ORD-' + Date.now();
+      const orderNum = result?.order_number || 'MWAH-' + Date.now();
+      const pm       = PAYMENT_METHODS.find(p => p.id === checkoutData.payment)?.name || checkoutData.payment;
+
+      // ── Send order confirmation emails (fire & forget — never blocks UI) ──
+      fetch('/api/send-order-email', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({
+          orderNum,
+          info:          { ...info, address: [info.address, info.state, info.zip].filter(Boolean).join(', ') },
+          cart,
+          total:         getCartTotal(),
+          paymentMethod: pm,
+        }),
+      }).catch(err => console.warn('[MWAH] Email send failed silently:', err.message));
 
       // Show success screen
       document.getElementById('checkoutContent').innerHTML = `
