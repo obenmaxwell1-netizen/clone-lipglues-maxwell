@@ -54,7 +54,7 @@
           '<path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.248-1.97 9.289c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L6.278 14.445l-2.937-.924c-.638-.198-.651-.638.136-.944l11.462-4.42c.532-.194.998.13.623 2.091z"/>',
         '</svg>',
       '</a>',
-      '<a class="op-nav__ig" href="tel:+9406227259" aria-label="Call Us" data-analytics-platform="phone" data-analytics-location="' + location + '">',
+      '<a class="op-nav__ig" href="tel:+19406227259" aria-label="Call Us" data-analytics-platform="phone" data-analytics-location="' + location + '">',
         '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">',
           '<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>',
         '</svg>',
@@ -107,9 +107,14 @@
         '</div>',
         '<div class="op-nav__drawer-links">', 
           centerLinksHTML, 
-          '<button type="button" class="op-nav__link" id="contactUsToggle" style="background: none; border: none; padding: 0; font: inherit; color: inherit; cursor: pointer; text-align: left; width: 100%;">CONTACT US</button>',
+          '<button type="button" class="op-nav__link" id="contactUsToggle" style="background: none; border: none; padding: 0; font: inherit; color: inherit; cursor: pointer; display: flex; justify-content: space-between; align-items: center; width: 100%;">',
+            '<span>CONTACT US</span>',
+            '<svg id="contactUsChevron" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition: transform 0.3s ease;">',
+              '<polyline points="6 9 12 15 18 9"></polyline>',
+            '</svg>',
+          '</button>',
         '</div>',
-        '<div class="op-nav__drawer-social" id="contactUsSocials" style="display: none; padding-top: 15px; flex-wrap: wrap;">', drawerSocialsHTML, '</div>',
+        '<div class="op-nav__drawer-social" id="contactUsSocials" style="display: none; padding-top: 5px; padding-bottom: 15px; flex-wrap: wrap; gap: 15px; transition: opacity 0.3s ease; opacity: 0;">', drawerSocialsHTML, '</div>',
       '</div>',
     ].join("");
 
@@ -147,13 +152,18 @@
 
       var contactToggle = drawer.querySelector("#contactUsToggle");
       var contactSocials = drawer.querySelector("#contactUsSocials");
+      var contactChevron = drawer.querySelector("#contactUsChevron");
       if (contactToggle && contactSocials) {
         contactToggle.addEventListener("click", function(e) {
           e.preventDefault();
           if (contactSocials.style.display === "none") {
             contactSocials.style.display = "flex";
+            if (contactChevron) contactChevron.style.transform = "rotate(180deg)";
+            setTimeout(function() { contactSocials.style.opacity = "1"; }, 10);
           } else {
-            contactSocials.style.display = "none";
+            contactSocials.style.opacity = "0";
+            if (contactChevron) contactChevron.style.transform = "rotate(0deg)";
+            setTimeout(function() { contactSocials.style.display = "none"; }, 300);
           }
         });
       }
