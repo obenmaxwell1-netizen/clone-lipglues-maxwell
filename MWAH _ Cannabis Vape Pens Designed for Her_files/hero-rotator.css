@@ -214,3 +214,14 @@
     transition: none;
   }
 }
+
+/* Supporting / small text line below the sub-description in hero slides */
+.sm-hero__supporting {
+  margin: 0;
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  opacity: 0.7;
+  line-height: 1.4;
+}

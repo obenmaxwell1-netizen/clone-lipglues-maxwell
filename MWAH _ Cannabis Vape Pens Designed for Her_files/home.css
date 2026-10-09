@@ -238,6 +238,16 @@
   color: var(--ink);
   margin: 0;
 }
+/* Description paragraph below the newsletter title */
+.op-signup__desc {
+  font-family: var(--font);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text-mid);
+  margin: 0;
+  max-width: 420px;
+}
 .op-signup__form {
   display: flex;
   align-items: center;

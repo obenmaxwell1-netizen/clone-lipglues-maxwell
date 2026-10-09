@@ -680,11 +680,11 @@
         if (btn) btn.disabled = true;
         try {
           await sbFetch('/rest/v1/subscribers', { method:'POST', headers:{'Prefer':'return=minimal'}, body: JSON.stringify({email, source}) });
-          if (statusEl) { statusEl.textContent = "You're in! Check your inbox for updates."; statusEl.classList.remove('visually-hidden'); }
+          if (statusEl) { statusEl.textContent = 'Thank you for signing up. Your subscription request has been received.'; statusEl.classList.remove('visually-hidden'); }
           if (emailInput) emailInput.value = '';
           trackEvent('email_signup', null, source);
         } catch(err) {
-          if (statusEl) { statusEl.textContent = 'Something went wrong. Please try again.'; statusEl.classList.remove('visually-hidden'); }
+          if (statusEl) { statusEl.textContent = "We couldn't complete your subscription. Please try again."; statusEl.classList.remove('visually-hidden'); }
         } finally {
           if (btn) btn.disabled = false;
         }
