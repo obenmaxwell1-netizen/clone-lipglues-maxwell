@@ -22,8 +22,8 @@
   var LCB_WARNING = "This product has intoxicating effects and may be habit forming. Marijuana can impair concentration, coordination, and judgment. Do not operate a vehicle or machinery under the influence of this drug. There may be health risks associated with consumption of this product. For use only by adults 21 and older. Keep out of reach of children. Marijuana products may be purchased or possessed only by persons 21 and older. MWAH is licensed in Washington and California.";
   // Two-line tagline (Kyle 2026-04-28). Rendered with <br> between
   // sentences so it breaks consistently regardless of viewport width.
-  var TAGLINE_LINE_1 = "Cannabis designed for her.";
-  var TAGLINE_LINE_2 = "Find us at licensed retailers.";
+  var TAGLINE_LINE_1 = "Eight bold flavors. Designed for her.";
+  var TAGLINE_LINE_2 = "Find us at licensed dispensaries near you.";
   var COPYRIGHT_YEAR = new Date().getFullYear();
 
   function render() {
@@ -64,6 +64,7 @@
             '<a href="https://www.tiktok.com/@gimmeemwahh?_r=1&_t=ZP-99u1fW9hVRX" class="op-footer__link" aria-label="TikTok (opens in new tab)" target="_blank" rel="noopener noreferrer" data-analytics-platform="tiktok" data-analytics-location="footer">TIKTOK</a>',
             '<a href="https://t.me/gimmemwhah" class="op-footer__link" aria-label="Telegram (opens in new tab)" target="_blank" rel="noopener noreferrer" data-analytics-platform="telegram" data-analytics-location="footer">TELEGRAM</a>',
             '<a href="tel:+19406227259" class="op-footer__link" aria-label="Call Us" data-analytics-platform="phone" data-analytics-location="footer">CALL US</a>',
+            '<a href="mailto:contact@mwahlipgloss.com" class="op-footer__link" aria-label="Email us" data-analytics-platform="email" data-analytics-location="footer">EMAIL US</a>',
           '</div>',
         '</div>',
         '<div class="op-footer__lcb">',

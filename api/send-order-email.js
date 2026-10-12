@@ -5,9 +5,9 @@
  */
 
 const RESEND_ENDPOINT = 'https://api.resend.com/emails';
-const ADMIN_EMAIL     = 'contact@gimmeemwah.com';
-const FROM_NAME       = 'MWAH';
-const FROM_ADDRESS    = 'contact@gimmeemwah.com';
+const ADMIN_EMAIL     = 'contact@mwahlipgloss.com';
+const FROM_NAME       = 'MWAH Lip Gloss';
+const FROM_ADDRESS    = 'contact@mwahlipgloss.com';
 
 module.exports = async function handler(req, res) {
   // Only allow POST
@@ -139,8 +139,8 @@ module.exports = async function handler(req, res) {
           <!-- Footer -->
           <tr>
             <td style="background:#0d0d0d;border-top:1px solid #2a2a2a;border-radius:0 0 16px 16px;padding:28px 40px;text-align:center;">
-              <p style="margin:0 0 8px;color:#555;font-size:0.78rem;">Questions? Reach us at <a href="mailto:contact@gimmeemwah.com" style="color:#e75480;text-decoration:none;">contact@gimmeemwah.com</a></p>
-              <p style="margin:0;color:#444;font-size:0.72rem;">&copy; ${new Date().getFullYear()} MWAH. All rights reserved. &nbsp;·&nbsp; <a href="https://gimmeemwah.com/privacy" style="color:#555;text-decoration:none;">Privacy Policy</a></p>
+              <p style="margin:0 0 8px;color:#555;font-size:0.78rem;">Questions? Reach us at <a href="mailto:contact@mwahlipgloss.com" style="color:#e75480;text-decoration:none;">contact@mwahlipgloss.com</a></p>
+              <p style="margin:0;color:#444;font-size:0.72rem;">&copy; ${new Date().getFullYear()} MWAH Lip Gloss. All rights reserved. &nbsp;·&nbsp; <a href="https://mwahlipgloss.com/privacy" style="color:#555;text-decoration:none;">Privacy Policy</a></p>
             </td>
           </tr>
 
